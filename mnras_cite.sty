@@ -1,0 +1,127 @@
+%-------------------------------------------------------------------------------
+%	MNRAS_CITE.STY
+%-------------------------------------------------------------------------------
+% This style is required when using MNRAS type bibliography references 
+% i.e. MNRAS.BST, with BiBTeX, UNLESS you are using the MNRAS.STY document
+% style. 
+% Invoked by LaTeX command \documentstyle[mnras_cite]{style}
+%
+% Author: Paul Harrison
+%
+% This version:	v1.0
+% Date: 	29-Jul-1991
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Alterations to the cite commands to make them do more sensible things.
+% N.B. the bibliography style should produce entries which have labels where
+% the date is delimited by angle brackets '<>' for these macros to work
+% properly. They will not give very sensible error messages if you do not do 
+% this properly.
+%
+% A new command \scite{key} is defined which produces a citation which is 
+% suitable for insertion in a sentence. i.e. it does not put brackets around 
+% the whole citation, only the date. Also \pcite{key} produce output with no
+% parentheses whatsoever. 
+%
+% GBD 28/9/92
+% I've defined \gcite{key} which will only give the date of the
+% reference in brackets so that you can refer to things like Limber's
+% equation, and a \ncite{key} which will only give the Author for
+% future references. \acite gives what we really want, which is
+% Author's (year).
+% GBD 28/9/92
+%
+% Should redefine @bibitem really to have any hope of compatibility
+% the command \lbibcite is defined to deal with the citations.
+
+%%%%%\def\bibitem[#1<#2>]#3{\par\hangindent=10mm\hangafter=1
+\def\bibitem[#1<#2>]#3{\par\hangindent=5mm\hangafter=1
+    \if@filesw
+	{\def\protect##1{\string ##1\space}
+	\immediate\write\@auxout{\string\lbibcite{#3}{#1}{#2}}}
+    \fi}
+%note that the lbibcite defines two types of citation one contains the names,
+% the other the year
+\def\lbibcite#1#2#3{\global\@namedef{b@#1}{#2}
+                    \global\@namedef{by@#1}{#3}}
+
+\def\@bcite#1#2{({#1\if@tempswa , #2\fi})}
+\def\@pcite#1#2{#1\if@tempswa , #2\fi}
+\def\@gcite#1#2{$\!(\!\!$#1)}
+\def\@gmcite#1#2{$\!\!\!\!$#1}
+
+% this declaration contains what is put between the name and the date
+\def\@brcite{\ (}
+\def\@ebrcite{)}
+\def\@fmttop#1{\@fmtcite[\csname #1\endcsname]}
+\def\@citex[#1]#2{\if@filesw\immediate\write\@auxout{\string\citation{#2}}\fi
+  \def\@citea{}\@cite{\@for\@citeb:=#2\do
+    {\@citea\def\@citea{;\ }\@ifundefined
+       {b@\@citeb}{{\bf ?}\@warning
+       {Citation `\@citeb' on page \thepage \space undefined}}
+{\csname b@\@citeb\endcsname\@citebro\csname by@\@citeb\endcsname\@citebrc}}}
+{#1}}
+
+\def\@citeg[#1]#2{\if@filesw\immediate\write\@auxout{\string\citation{#2}}\fi
+  \def\@citea{}\@cite{\@for\@citeb:=#2\do
+    {\@citea\def\@citea{;\ }\@ifundefined
+       {b@\@citeb}{{\bf ?}\@warning
+       {Citation `\@citeb' on page \thepage \space undefined}}
+{\@citebro\csname by@\@citeb\endcsname\@citebrc}}}
+{#1}}
+\def\@citen[#1]#2{\if@filesw\immediate\write\@auxout{\string\citation{#2}}\fi
+  \def\@citea{}\@cite{\@for\@citeb:=#2\do
+    {\@citea\def\@citea{;\ }\@ifundefined
+       {b@\@citeb}{{\bf ?}\@warning
+       {Citation `\@citeb' on page \thepage \space undefined}}
+{\csname b@\@citeb\endcsname}}}
+{#1}}
+
+\def\cite{\@ifnextchar [{\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@bcite\@tempswatrue\@citex}
+                        {\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@bcite\@tempswafalse\@citex[]}}
+\def\pcite{\@ifnextchar [{\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@pcite\@tempswatrue\@citex}
+                        {\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@pcite\@tempswafalse\@citex[]}}
+\def\scite{\@ifnextchar [{\let\@citebro=\@brcite
+                          \let\@citebrc=\@ebrcite
+                          \let\@cite=\@pcite\@tempswatrue\@citex}
+                        {\let\@citebro=\@brcite
+                          \let\@citebrc=\@ebrcite
+                          \let\@cite=\@pcite\@tempswafalse\@citex[]}}
+\def\ncite{\@ifnextchar [{\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@pcite\@tempswatrue\@citen}
+                        {\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@pcite\@tempswafalse\@citen[]}}
+\def\gcite{\@ifnextchar [{\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@gcite\@tempswatrue\@citeg}
+                        {\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@gcite\@tempswafalse\@citeg[]}}
+\def\gmcite{\@ifnextchar [{\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@gmcite\@tempswatrue\@citeg}
+                        {\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@gmcite\@tempswafalse\@citeg[]}}
+%%%%%%\def\acite#1{\ncite{#1}'s\,\,\gcite{#1}}
+\def\acite#1{\ncite{#1}\,\,\gcite{#1}}
+\def\mcite#1#2{\ncite{#1}\,\,\,\gmcite{#1},$\;$\gmcite{#2}}
+
+\def\thebibliography#1
+{\section*{References}   
+   \def\newblock{\hskip .11em plus .33em minus -.07em}
+\reset@font\small
+   \sloppy
+   \sfcode`\.=1000\relax
+   \parindent=0mm\parskip0mm}
+\let\endthebibliography=\relax
+

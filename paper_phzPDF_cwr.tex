@@ -1,0 +1,1364 @@
+
+\pdfoutput=1    
+\documentclass[useAMS]{mn2e}
+\setlength{\paperheight}{12in}
+\usepackage{gensymb}
+\usepackage{graphicx}  % for includegraphicsx
+\usepackage{mnras_cite}
+\usepackage{ulem}
+
+\usepackage{dcolumn}  % Align table columns on decimal point
+\usepackage{bm}       % bold math
+\usepackage{amssymb,amsmath}
+\usepackage{color}
+
+\setlength{\textheight}{230mm}
+%\slugcomment{Submitted to ApJLett}asorey
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%s%%%% LyX specific LaTeX coMmands.
+%% bold symbol macro for standard LaTeX users
+\providecommand{\boldsymbol}[1]{\mbox{\boldmath $#1$}}
+
+\def\etal{et al.\ }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+
+
+\newcommand{\angstrom}{\mbox{\normalfont\AA}}
+\newcommand{\footstar}[1]{$^*$ \footnotetext{$^*$#1}}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+\newcommand{\zbar}{\bar{z}}
+\newcommand{\xir}{\xi(r)}
+\newcommand{\xips}{\xi(\pi,\sigma)}
+\newcommand{\xisp}{\xi(\sigma,\pi)}
+
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\lexp}{\mathop{\langle}}
+\newcommand{\rexp}{\mathop{\rangle}}
+
+\newcommand{\rexpc}{\mathop{\rangle}}
+\newcommand{\beqa}{\begin{eqnarray}}
+\newcommand{\eeqa}{\end{eqnarray}}
+\newcommand{\camb}{{\tt CAMB$\_$sources}}
+\newcommand{\healpix}{{\tt Healpix}}
+
+\newcommand{\MCK}[1]{{\color{blue}\textbf{MCK: #1\ }}}
+\newcommand{\JAB}[2]{{\color{red}\textbf{JAB: #1\ }}}
+\newcommand{\JABg}[2]{{\color{green}\textbf{JAB: #1\ }}}
+
+\def\nn{{\~n}}
+
+\def\vk{{\hbox{\bf k}}}
+\def\vq{{\hbox{\bf q}}}
+\def\vx{{\hbox{\bf x}}}
+\def\vp{{\hbox{\bf p}}}
+\def\dD{\delta_{\rm D}}
+\def\d{{\rm d}}
+\def\kk{\kappa}
+\def\calP{{\cal P}}
+\def\calC{{\Theta}}
+\def\calr{{\cal R}}
+\def\vecx{{\vec x}}
+
+\def\Mpc{\, h^{-1} \, {\rm Mpc}}
+\def\Gpc{\, h^{-1} \, {\rm Gpc}}
+\def\Gpccube{\, h^{-3} \, {\rm Gpc}^3}
+\def\kvecMpc{\, h \, {\rm Mpc}^{-1}}
+
+\def\la{\mathrel{\mathpalette\fun <}}
+ \def\ga{\mathrel{\mathpalette\fun >}}
+\def\fun#1#2{\lower3.6pt\vbox{\baselineskip0pt\lineskip.9pt
+\ialign{$\mathsurround=0pt#1\hfil##\hfil$\crcr#2\crcr\sim\crcr}}}
+
+\begin{document}
+
+\title[Angular clustering with photometric redshift PDFs]
+%{Reconstructing radial information using photometric redshift PDFs}
+{Galaxy clustering with photometric surveys using PDF redshift information}
+\author[Asorey et al.]
+{%\parbox{\textwidth}{Jacobo Asorey$^{1}$\thanks{jasorey@illinois.edu}, Matias Carrasco Kind$^{2,3}$, Ignacio Sevilla-Noarbe$^{2,4}$, Robert J. Brunner$^{1,2,3}$, Jon J. Thaler$^{1,2}$, Risa H. Wechsler$^{5,6,7}$ 
+\parbox{\textwidth}{Jacobo Asorey$^{1}$\thanks{jasorey@illinois.edu}, Matias Carrasco Kind$^{2,3}$, Ignacio Sevilla-Noarbe$^{2,4}$, Robert J. Brunner$^{1,2,3}$, Jon J. Thaler$^{1,2}$
+%\footstar{www.cosmologist.info}
+}	\vspace{0.4cm}\\
+$^1$Department of Physics, University of Illinois, Urbana, IL 61801 USA\\
+$^2$Department of Astronomy, University of Illinois, Urbana, IL 61801 USA\\
+$^3$National Center for Supercomputing Applications, Urbana, IL 61801 USA\\
+$^4$Centro de Investigaciones Energ\'eticas, Medioambientales y Tecnol\'ogicas (CIEMAT), Madrid, Spain}
+%$^5$Kavli Institute for Particle Astrophysics \& Cosmology, P. O. Box2450, Stanford University, Stanford, CA 94305, USA\\
+%$^6$SLAC National Accelerator Laboratory, Menlo Park, CA 94025, USA\\
+%$^7$Department of Physics, Stanford University, 382 Via Pueblo Mall, Stanford, CA 94305, USA}
+
+\date{\today}
+\pagerange{1--10} \pubyear{2015}
+\maketitle
+
+
+%\begin{abstract} \\
+%Hi
+
+\begin{abstract}\\
+Photometric surveys produce large-area maps of the galaxy distribution but with less accurate redshift information than is obtained by spectroscopic methods.  Photometric redshift (photo-z) algorithms use galaxy colors obtained through multi-band imaging to produce a probability density function (PDF) for each galaxy in the map.  We used simulated data to study the effect of using different photo-z estimators to assign galaxies to redshift bins in order to compare their effects on clustering and galaxy bias  measurements.  We found that if we use the entire PDF, rather than a single-point (mean or mode) estimate, the deviations are less biased, especially when using narrow redshift bins.  When the redshift bin widths are  $\Delta z=0.1$ , the use of the entire PDF reduces the typical measurement bias from $5\%$, when using single point estimates, to $3\%$.
+
+%Photometric surveys produce a huge amount of Large Scale Structure information, by creating large maps of the galaxy distribution but with less 
+%accurate redshift information than is obtained by spectroscopic methods. The photometric redshifts (photo-$z$) of the galaxies 
+%are computed from the galaxy colours obtained through multi-band imaging. The output is 
+%a probability density function (PDF) describing the likelihood of a galaxy to be at a given redshift.				 				 
+%We can use different statistical estimators derived from the photo-$z$ PDF to assign galaxies to specific 
+%redshift bins in order to study the distribution of galaxies in 
+%the survey range. Using simulated data, we studied the impact of different photo-z estimators and photometric 
+%redshift binning on clustering measurements and also present a method of how to incorporate the PDF information  
+%in the clustering analysis. 
+%We found that there are relative differences between the galaxy bias of the 
+%photo-z sample and the values obtained by using PDF stacking to reconstruct the 
+%sample redshift distribution. We show that if we weigh the stacking and the clustering counts 
+%using the PDF information, instead of using single point estimates (mode,mean), the deviations
+%are less biased, especially when using narrow redshift bin configurations. The difference reaches a $5\%$ measurement bias 
+%when using single point estimates compared with a $3\%$ relative error observed when using PDF weighted galaxies, 
+%for samples selected according to $\Delta z=0.1$ redshift bin widths. As the true redshift distributions of 
+%photometric surveys are unknown when using real data, we can use this method to estimate the measurement bias 
+%on cosmological parameters by using simulated mock galaxy catalogues similar to the corresponding galaxy survey.
+
+%We found that there is a relative difference between the 
+%true galaxy bias and the bias obtained using photo-z if we select galaxies 
+%according to single statistic summarizations (mode,mean) in redshift bins and we estimate the 
+%redshift distribution by stacking PDFs . This difference is lower if we use 
+%PDF information.
+
+
+\end{abstract}
+
+\begin{keywords}
+galaxy clustering; angular correlations; photometric redshift surveys
+\end{keywords}
+
+\section{Introduction}\label{sec:introduction}
+The analysis of the three-dimensional distribution of galaxies has become one
+of the major probes to understand the history of the Universe and the growth of
+matter perturbations. Spectroscopic surveys such as WiggleZ\footnote{http://wigglez.swin.edu.au/site/} \cite{wigglezover},
+BOSS\footnote{https://www.sdss3.org/surveys/boss.php} \cite{bossover} and VVDS\footnote{http://cesam.oamp.fr/vvdsproject/vvds.html} \cite{vvds} 
+have obtained precise maps of this distribution and many studies have increased our
+knowledge about the expansion history of the Universe and the growth of
+structures. However, targeting galaxies and obtaining spectra is a slow and costly process
+and therefore past and current spectroscopic surveys have been limited to lower
+redshifts and a reduced number of galaxies.
+
+Multi-band imaging of wide areas of the sky is complementary to spectroscopic surveys.
+These photometric surveys such as the Canada-France-Hawaii Telescope Legacy Survey 
+(CFHTLS)\footnote{http://www.cfht.hawaii.edu/Science/CFHTLS/},  
+Dark Energy Survey (DES\footnote{http://www.darkenergysurvey.org/}, \pcite{desover}) and the Large 
+Synoptic Survey Telescope (LSST\footnote{http://www.lsst.org/lsst/}, \pcite{lsstcol}) can extract redshift information 
+from the colours of millions of galaxies without being affected by spectroscopic selection effects. %Another advantage 
+%of photometric surveys is that we can perform weak lensing analysis by studying the distortion on the shapes and 
+%brightness of the background galaxies. 
+
+%In the last decades we have completed our knowledge about the Universe combining 
+%the measurements of different cosmological probes like CMB, Supernovae and LSS 
+%measurements.  LSS measurements were based on clustering measurements 
+%of the catalogues obtained by spectroscopic surveys like the different SDSS surveys. 
+%Another popular alternative to spectroscopic surveys are photometric surveys, as it is 
+%cheaper to obtain the redshift of each galaxy.
+
+Photometric redshifts (photo-z) are obtained using multi-band photometry in combination with different techniques which
+translate the photometric properties of the galaxies into a redshift. One broad category of these include template-based
+methods \cite{BPZ,lephare}, in which a set of calibrated galaxy spectral energy distributions (SEDs) is fit to the photometric data to find the one that best represents the observed fluxes.
+The other techniques use a spectroscopic training set and machine learning 
+algorithms such as artificial neural networks \cite{collister04}, boosted decision trees, \cite{gerdes10} or prediction trees and random forests \cite{tpz} to generate a photo-$z$ PDF estimate.
+
+Probability distribution functions of various astronomical measurements have been used in cosmological analyses, 
+for example luminosity functions \cite{sheth07} weak lensing \cite{mandelbaum2008}, cluster selection techniques 
+\cite{vanbreukelen09}, and real-space clustering of quasars \cite{myers09}. 
+However, a systematic analysis of the use of photometric redshift PDFs in galaxy clustering has not been 
+performed, mostly due to the lack of reliable PDF estimation and its computational cost.  
+
+%From the consideration that photometric redshifts are described by a probability density function 
+%(PDF), some studies have incorporated it to cosmological studies. There have been attempts to 
+%estimate luminosity functions using PDFs \cite{sheth07},  weak lensing \cite{mandelbaum2008}, 
+%cluster selection techniques \cite{vanbreukelen09}, and real-space clustering of quasars 
+%\cite{myers09}.
+
+%However, a systematic analysis of how to use the full photometric redshift PDFs in galaxy clustering has not 
+%been performed in the previous analyses mostly due to the the lack of reliable PDF 
+%estimation and because it is computationally expensive. From photo-$z$ PDFs we 
+%can employ different statistical estimators such as  the mean redshift or the redshift of the 
+%peak of the distribution (the statistical mode). We can also include the full PDF information in the clustering measurements. 
+
+
+In this work, we study how galaxy angular clustering depends on the chosen photo-$z$ estimate and on the photo-$z$ bin width,
+by comparing with respect to true redshift clustering, using realistic simulations. We also show how to include the full probability distribution when 
+estimating the angular correlation functions. We study the impact of using 
+different statistical quantities defining the photo-z on the determination of galaxy bias estimation. 
+In section \ref{sec:methodology} we describe the methodology followed in the paper. We describe the angular clustering 
+results and the fitting to galaxy bias in section \ref{sec:results}, and we discuss them in section \ref{sec:discussion}. 
+Finally, we summarize the main conclusions in section \ref{sec:conclusion}.
+
+\section{Methodology}\label{sec:methodology}
+The standard approach for analysing galaxy clustering in photometric surveys consists on subdividing the 
+catalogue into sub-samples selected by 'top-hat' photo-z redshift bins. 
+The value of the photo-z for a galaxy to be in one bin or another is usually a point estimate of this quantity.
+The scope of this study is to quantify how angular clustering analysis is affected by the 
+choice of the photometric redshift estimator, including one that uses the full PDF information instead of 
+photo-z point estimates. We addressed this by
+measuring the clustering of a subsample of the DES-BCC Aardvark simulation mock galaxy 
+catalogue \cite{busha2013}. We compared the clustering measurements given by different
+redshift estimators when considering different redshift bin configurations. Finally,
+we quantified those differences by fitting theoretical galaxy correlation functions
+in order to estimate the linear galaxy bias, \cite{kaiser84}, as a metric to evaluate which photo-z
+estimator is more reliable.
+
+%In order to fully understand the effect of using the full photo-z probability distribution 
+%function information we chose to use cosmological simulations with no other systematics 
+%effects. We have selected 9 pixels from the BCC simulations (Aadvark v1.0) 
+%in order to test the differences between the different statistical methods. Each pixel
+%covers 54 sq. deg. and therefore, our mock survey area covers about $450$ sq. deg. 
+%TPZ was trained using a different pixel from the simulation. We only considered objects with 
+%magnitudes below $25$ .
+
+\subsection{Simulation Data}
+The mock galaxy catalogue considered here is the Aardvark v1.0 catalogue from the Blind 
+Cosmology Challenge (BCC) simulations, developed for DES.  
+The catalogue is created from three $\Lambda$CDM N-body dark 
+matter simulations, with sizes of $1050$ Mpc/h, $2600$ Mpc/h, $4000$ Mpc/h and 
+$1400^3$, $2048^3$ and $2048^3$ particles, respectively. They were created using Gadget-2 \cite{gadget} and 
+initial conditions given by CAMB \cite{cambt} and 2LPT \cite{2lpt}. The algorithm that populates the dark matter 
+halos with galaxies, ADDGALS \cite{busha2013}, follows a prescription based on 
+SubHalo Abundance Matching (SHAM) techniques, \cite{conroy2006,busha2013,reddick2013}. 
+The final catalogue is complete 
+down to $r<25$ and covers $1/4$ of the sky. Galaxy properties such as colour or luminosity are 
+assigned by matching a spectroscopic training sample from the SDSS DR6 value added 
+catalogue \cite{blanton05} at low redshift. This training is extrapolated to higher redshift 
+matching the colour distribution to SDSS DR8 \cite{sdssdr8} and DEEP2 \cite{deep2} photometric data. Then,
+the output catalogue includes DES colors and errors for each galaxy of the catalogue. 
+These catalogues have been compared with real data by the DES collaboration, 
+\cite{chang2015,leistedt2015}.
+
+
+The full BCC-Aardvark-v1.0c catalogue covers 10313 sq. degree to full DES depth, 
+for a total of $1.36 \cdot 10^{9}$ galaxies. The simulated catalogue is stored in files 
+according to \healpix \footnote{http://healpix.jpl.nasa.gov/} \cite{healpix} pixels of $n_{side}=8$. 
+We chose a contiguous area of the simulation by using $24$ of such pixels, 
+which corresponds to an area of about $1200$ square degrees on the sphere in order to 
+have a significant amount of small scales sampling.
+ For our study, we have selected the galaxy sample according to a magnitude 
+selection cut of $g<24$. This cut corresponds to a selection in g band of signal-to-noise greater than 20 
+in the simulation, which incorporates the DES observed photometric error. 
+The total number of galaxies in the catalogue after applying the 
+magnitude cut is around 30 million galaxies. 
+
+\subsection{Photometric redshift code}
+We have used the publicly available code TPZ\footnote{http://lcdm.astro.illinois.edu/code/mlz.html}, 
+\cite{tpz} to estimate the galaxy 
+redshift probability distributions. TPZ is a parallel code that estimates photo-$z$ PDFs using 
+prediction trees and random forests. A prediction tree is constructed by splitting 
+the data in recursive branches until a convergence criterion is reached. In order to 
+construct more robust PDFs, the code uses the random forest technique in which $N_T$ 
+bootstrap samples of the training set are created and prediction trees are generated for the 
+$N_T$ samples. In order to include the measurement errors, e.g., magnitude errors, $N_R$ 
+training samples are created by perturbing the training set according to the errors of the 
+measurement variables. Finally, the PDF of each galaxy in the sample is created by 
+combining the prediction trees. TPZ was one of the algorithms used in the 
+DES Science Verification Data \cite{sanchez14}, and produced one of the best performances for that  dataset. 
+
+We have considered $10^5$ galaxies as a training set, up to full depth, therefore using less than $1\%$ 
+of the available data for this purpose. The training set galaxies were confined in a region of $54$ square degrees.
+
+As defined in \pcite{tpz}, the concentration of individual galaxy 
+PDFs, $p(z)$ is enclosed in TPZ  as an output a PDF concentration parameter called zConf. 
+This parameter is defined as the integrated probability between $\bar{z}\pm\sigma_{TPZ}(1+z_{phz})$ and measures 
+the narrowness of the PDF. In this case, we 
+selected $\sigma_{TPZ}=0.075$, which is similar to the $1-\sigma$ confidence interval of the PDFs. We can select different quality cuts using this parameter. It is 
+related with the BPZ ODDS parameter \cite{BPZ}. 
+%This may reduce the bias between the $z_{phz}$ and $z_s$ but
+%may induce a selection bias towards red populations because usually their PDFs are narrower than blue 
+%populations. And we will also increase the shot noise when applying an odds cut. 
+
+TPZ is a particular method of the MLZ framework. MLZ incorporates a Bayesian combination of techniques that estimate photometric PDFs, such as 
+template based methods or unsupervised machine learning algorithms, \cite{bayesian} and 
+the possibility to efficiently store the PDFs in the sparse representation basis, \cite{sparse}.  
+We only used the particular case of TPZ for the photometric redshifts in this paper given the good results produced by 
+TPZ on the DES Science Verification Data \cite{sanchez14} and the fact that we want to study the impact of using 
+photo-$z$ PDF in clustering as produced by a single technique. TPZ has been used, together with other codes listed in \pcite{sanchez14}, in 
+several DES Science Verification Data studies \cite{bonnet15,crocce15,giannantonio15,des15}
+
+
+\subsection{Survey configuration: Photo-z binning}
+We considered the redshift range $0.2<z<1.4$. 
+Galaxy clustering analysis in photometric surveys are usually done measuring angular correlations of 
+galaxy samples selected in different redshift bins. We divide the redshift information into 
+$N_z$ redshift bins of width $\Delta z$ in order to reduce the extent of the projection of radial information for 
+2D clustering analysis. As shown in \pcite{Asorey2012} and \pcite{eriksen15}, the optimal photometric redshift bins 
+are given by shells of about twice the size of the photometric redshift standard deviation. In this case, we considered different configurations
+in this study: $\Delta z=\{0.1,0.15,0.2,0.3\}$ in order to study the evolution of photometric clustering 
+with the bin width. The true redshift distribution of galaxies, n(z), is shown in Figure \ref{fig:fig2}, together with the redshift distribution 
+obtained by stacking TPZ PDFs. We also show (red) the n(z) of the considered training set.
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.43\textwidth]{../Plots/Fig_nz.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.43\textwidth]{Figures_paper/Fig1.pdf}
+\caption{In blue, the galaxy redshift distribution for 31 million galaxies with $g<24$ in the BCC Aadvark 1.0 catalogue
+ in the selected region of $1200$ sq. degrees. The dashed black line shows the 
+ result of stacking the individual PDFs of all the galaxies in the sample. In red, we show the true n(z) for the galaxies on the training set used in 
+ the photo-z machine learning algorithm.}%\sout{The latter is normalized to match the real 
+%distribution $n(z)$.} \MCK{I got this but it might raise unnecessary questions}}
+\label{fig:fig2}
+\end{center}
+\end{figure}
+For the study covered in this paper, we were only interested in a patch of the sky that covers $1200$ square 
+degrees, which allows us to measure the small scale clustering and to study how it depends on 
+the different photo-z statistical quantities. 
+
+In Figure \ref{fig:fig3}, we present the evolution with redshift of the photometric redshift error, $\sigma$, for the BCC sample of galaxies, 
+with $g<24$, given by: %\MCK{I believe this definition is for the variance $\sigma^2$, is this what you plot or the square root}:
+\begin{equation}
+\sigma^2=\int{p(z)(z-\bar{z})^2}
+\label{eq:sigmaphz}
+\end{equation} 
+where $\bar{z}$ is the mean redshift, defined in Equation (\ref{eq:mean}) below, and we compare it with the different redshift bin widths that we have considered in this paper. Although the optimal choice would be $\Delta z=0.15$ or $0.2$, we also consider extreme cases with $\Delta z=0.1$ or $0.3$ to extend the analysis of the dependence of photo-z clustering. In Figure \ref{fig:fig3b}, we show the normalized dispersion between the true redshift and the mean redshift. 
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.43\textwidth]{../Plots/Fig_sigz.pdf}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.43\textwidth]{../Plots/Fig_1200sqdeg_magcut24_sigz_zmean.pdf} 
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.43\textwidth]{Figures_paper/Fig2.pdf} 
+\caption{Dependence of the mean photo-z error, given by the mean value of $\sigma$ in Equation (\ref{eq:sigmaphz}) for galaxies in small true redshift bins, on the true redshift. Standard deviations are given by the square root of the variance of the photo-z errors in each bin. Dashed lines correspond to the width of the different bin configurations treated in this paper, in order to compare the bin widths with the photo-z dispersion for the sample considered.}
+\label{fig:fig3}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.43\textwidth]{Figures_paper/Fig3.pdf} 
+\caption{Normalized dispersion of mean photometric redshifts with respect to the true redshift. The color code corresponds to the relative number of galaxies with 
+respect to the 1:1 relation (black line) between true redshift and mean photometric redshift.}
+\label{fig:fig3b}
+\end{center}
+\end{figure}
+
+
+\subsection{Photo-z estimators per galaxy}\label{sec:estimators}
+\subsubsection{Single point statistics}
+Once TPZ obtains the PDF for each galaxy, we can estimate single statistical quantities 
+from it. In this study we focused on the mode redshift, $\hat{z}$ and the mean redshift, $\bar{z}$. 
+
+We define the mean as the first momentum of the PDF, $p(z)$:
+\begin{equation}
+\bar{z}=\int{zp(z)}
+\label{eq:mean}
+\end{equation}
+The mode redshift is the redshift at with highest probability in the PDF $p(z)$
+\begin{equation}
+p(\hat{z})=p_{max}
+\label{eq:mode}
+\end{equation}
+Another summarization or single point estimate that we consider in the paper is the Monte Carlo sampling redshift, $z_{MC}$ \cite{wittman2009}. 
+Monte Carlo photo-z is assigned by the redshift that corresponds to the value of the cumulative distribution function given by a random number between (0,1].%It is defined by the redshift that corresponds to the value of the cumulative distribution function given by a random number between (0,1]. 
+We also evaluated the median redshift but we decided not to include it in the final results as it is similar to the other point estimates and we decided to 
+reduce the analysis to the chosen single point estimates.
+
+We created a catalogue for each redshift bin considered by selecting the galaxies with the single point estimate in the range covered by the redshift bin.
+
+%Other statistical summarizations of photometric redshift like the median, $z_{median}$ or Monte Carlo sampling redshift, $z_{MC}$ \cite{wittman2009} that can be 
+%used but we have focused on the mean and the mode in our analysis for concreteness. The latter is defined by assign a redshift to the galaxy given that corresponds to the value of the cumulative distribution function given by a random number between (0,1]. We do not focus on the median for concreteness in this paper and we use the Monte Carlo sampling for a secondary analysis.
+
+\subsubsection{Photo-z weights}
+The proposed technique to incorporate the PDF information in our analysis consists on doing number 
+counts in redshift bins according to a weight 
+for each galaxy in each radial shell, given by the probability that the galaxy lies in the 
+corresponding redshift bin. 
+Because the TPZ PDF output is discretized, we define the galaxy weight as:
+\begin{equation}
+f_z = \sum_{i}{p(z_i)dz}
+\label{eq:weight_d}
+\end{equation}
+where we only consider redshifts $z_i$ that belong to the redshift bin in consideration. 
+According to this definition, a galaxy may have weights in different redshift bins, where the
+total weight of the galaxy in the whole redshift space is $f_{tot}=\sum_{j=1}^{N_z}{f_{z_j}}=1$. We measured the 
+galaxy clustering using the weights for the galaxy counts. The case that involves the photo-z single 
+point estimate cases (mean, mode) is equivalent to setting the weight to  $f_z=1$ for all the galaxies selected 
+in the corresponding redshift bin.
+
+We defined threshold cuts, $p_{threshold}$, in a similar way as in \pcite{mandelbaum2008}, 
+as the process of considering a galaxy in a redshift bin or not when using weights. Then, a galaxy 
+$\alpha$ in redshift bin $j$ would only be incorporated if
+\begin{equation}
+f_z > p_{threshold}
+\label{eq:threscut}
+\end{equation}
+When PDFs are broad and contain multiple peaks we might be introducing noise on each redshift bin by galaxies that are not in the bin but have 
+a non-negligible weight. This can be addressed by applying the threshold cut.
+
+In Figure \ref{fig:fig1}, we show a graphic example of the different photometric redshift estimators that we use. 
+We intentionally selected a PDF with a most frequent (mode) redshift, given by eq. (\ref{eq:mode}) within photometric bin $0.5<z<0.8$ but where the mean, defined in eq. (\ref{eq:mean}) is in a different redshift bin. In blue, we show the portion of the PDF between $0.5<z<0.8$ that corresponds to the weight of the galaxy in that redshift bin.
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.43\textwidth]{../Plots/Fig_nz.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.43\textwidth]{Figures_paper/Fig4_1.pdf}
+\caption{Example of the definitions of the different photometric 
+redshift estimators, where the mode redshift is shown by the vertical red dotted line and the mean redshift by the black dashed line.  The blue region corresponds to the part of the PDF that is between the photometric bin 
+$0.5<z<0.8$ (true redshift is z=0.603) which is shown as a hatched area. The PDF weight defined in eq. (\ref{eq:weight_d}) would be the fraction of the total area below the continuous line that is contained in the blue region.}
+\label{fig:fig1}
+\end{center}
+\end{figure}
+The PDF displayed in th Figure \ref{fig:fig1} is an extreme case. For this particular PDF, zConf=0.37, while near z=0.6 the mean PDF quality parameter is zConf$\sim0.95$.
+In appendix \ref{sec:ap1} we discuss the statistical properties of the mean and the mode and the overall quality of the photometric sample PDFs . 
+
+With photo-$z$ PDFs we can easily obtain the photometric sample redshift distribution in each bin $n(z)$ by stacking all the individual $p(z)$ of selected galaxies.
+\begin{equation}
+N(z)_{pdf}=\sum{p_i(z)f_{z_i}}
+\end{equation}
+In this paper, we have considered this definition as the default estimation of $n(z)$, setting $f_z=1$ for the galaxies selected according to single point statistics 
+in a redsift bin. We can also determine the the true $n(z)$, measured by the distribution of the true redshifts of this simulated sample. Throughout this paper, when we refer to true values, we are considering the latter definition.
+
+\subsection{Two point angular correlation function estimators}
+\subsubsection{Pixel based estimator}
+We computed the angular correlations using pixel maps of the galaxy density field. These maps are created using {\tt Healpix} for each redshift 
+bin and for each photometric redshift estimator, with  $n_{side}=1024$, corresponding to a minimum angular resolution of 0.06 degrees. For the definition of the estimator, see 
+\pcite{scranton02}, \pcite{crocce11}, and \pcite{wang13}. The angular correlation, is:
+\begin{equation}
+w(\theta) = \frac{1}{N_{pairs}}\sum_{ij}{\delta_i \delta_j}
+\end{equation}
+where $N_{pairs}$ is the number of pixel pairs at an angle $\theta$. We defined the density contrast as 
+$\delta_i=(n_i-\bar{n})/\bar{n}$ where $n_i$ is the number of counts in pixel $i$ and $\bar{n}$ the mean 
+number density of galaxies. When selecting galaxies in terms of the PDFs, the total number of counts in every pixel is the sum of 
+the weights of all the galaxies of the pixel, i.e.: $n_i=\sum\limits_{gal \in i}{f_z}$ and $\bar{n}=\sum\limits_i\sum\limits_{gal \in i}{f_z}$.
+
+In order to include errors on our measurements, we considered jackknife samples, dividing the survey area in $N_{JK}$ regions of about $3$ sq. deg. each one. Then, the covariance matrix is given by:
+\begin{equation}
+C_{\theta_i,\theta_j} = \frac{N_{JK}-1}{N_{JK}}\sum_{k=1}^{N_{JK}}(w_k(\theta_i)-w(\theta_i))(w_k(\theta_j)-w(\theta_j))
+\end{equation}
+which is the same definition used in \pcite{scranton02,norberg09,wang13}. For the galaxy bias fitting, we considered the mixed approach used in \pcite{crocce15} in which we determine the correlation matrix between diagonal elements and off-diagonal elements of the covariance matrix by using theoretical angular power spectra and finally 
+rescaling them with the variances given by the jackknife errors in order to determine the covariance matrix of the angular correlations.	
+
+\subsubsection{Direct pair counting estimator}
+An alternative method to measure angular correlations consists of using pair counts estimators. In order to estimate the angular correlation functions, we used the Landy-Szalay estimator, \cite{landyszalay},
+\beq
+w(\theta)=\frac{DD-2DR+RR}{RR}
+\label{eq:wtheta_p2p}
+\eeq
+where $DD$ is the number of galaxy-galaxy pairs, $DR$ is the galaxy-random pairs and $RR$ the random random pairs within $\theta$ and $\theta + \delta\theta$. The random catalogues are created throwing points in the survey footprint following a uniform density. These are appropriately normalized to the total number of counts. When counting pairs, each galaxy was weighted according to Equation (\ref{eq:weight_d}). We compare in section \ref{sec:results} the point to point estimator with the pixel based estimator.
+
+We computed the angular correlation using the publicly 
+available tree code\footnote{http://lcdm.astro.illinois.edu/code/tpacf.html},
+explained and used in \pcite{dolence08,wang13}.
+
+\subsection{Theoretical modeling}
+The angular auto-correlation at a given redshift bin is given by:
+\begin{equation}
+w(\theta)=\int{dr_1\phi(r_1)}\int{dr_2\phi(r_2)\xi(r_1,r_2,\theta)}
+\label{eq:wtheta}
+\end{equation}
+where the spatial correlation function $\xi(r_1,r_2,\theta)$ encodes the 3D information of the density
+field that we are projecting. The window functions  $\phi$ are
+a combination of the galaxy redshift distribution, $n(z)$, the galaxy bias, $b(z)$, and the linear growth rate of structure, 
+$D(z)$, in such a way that $\phi(z(r))=n(z®)b(z®)D(z®)$, where we assumed the linear local bias model \cite{kaiser84}:
+\begin{equation}
+\delta_g=b_g\delta 
+\label{eq:bias}
+\end{equation}
+and we define one bias parameter per redshift bin.
+
+We used CAMB, \cite{cambt} to obtain the linear power spectrum and 
+Halofit, \cite{halofit,takahashi2012} in order to include non-linearities at small scales. Then, we can Fourier transform it in order to compute the 
+3D correlations required by Equation (\ref{eq:wtheta}). For this paper, we considered a flat $\Lambda$CDM model driven by the simulation 
+cosmological parameters when computing the theoretical correlation function.
+We also included linear redshift space distortions as a series of multipoles following \cite{kaiser87,hamilton92}.
+
+
+
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.5\textwidth]{../Plots/bccw500sqdeg_tpz_zs_All_zmode_zmean_andod0p8_z_0p2_1p4_nz6_bin_33.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.45\textwidth]{Figures_paper/Fig5.pdf}
+\caption{We show a comparison between the pixel based clustering measurement (purple points) and the 
+point-to-point clustering measurement (purple shadow include measurement within errorbars) for the photometric redshift bin $1.0<z<1.2$ when considering galaxy weights and 
+a threshold on the weights of $f_z>0.1$. We can see the good agreement between these two. }
+\label{fig:fig4}
+\end{center}	
+\end{figure}
+
+\begin{figure*}
+\begin{center}
+\begin{tabular}{cc}
+\includegraphics[trim =0cm 0cm 0cm 0cm, width=0.8\textwidth]{Figures_paper/Fig_nozconf_ratios_z1_clustering_nolegend_thick_1.pdf}
+\end{tabular}
+\caption{This Figure shows a comparison between angular clustering measurements using photometric redshifts and true redshifts. We considered different redshift estimators, for redshift bins centered at $z=1$ but different widths. In the top panels we show the results for the mode (red triangles) and the mean (black stars). In the bottom row we show the results when using PDF weights, with threshold $p_{threshold}=0$  (green squares), and when considering thresholds to the weights of $p_{threshold}=0.1$ (purple triangles). We show in each column the corresponding bin width. We show the results for $\hat{z}$ by a red dashed line in order to compare with the upper panels. The ratios with respect to the true redshift results decrease with the bin width and they are different depending on the considered photo-z definition. }%In each panel, we show on the left the two point angular correlation functions for true redshift galaxies and the considered photometric redshift estimators. On the right of each panel, we show the ratio of each photometric redshift sample with respect to the true clustering, categorized in three different subsets. In the topmost, we show the ratios for the mode, $\hat{z}$ and mean, $\bar{z}$. In the middle one, we also show the results for both of them when we apply a $zConf$ cut at $0.8$ for both quantities. We show the results for $\bar{z}$ by a red dashed line in order to compare between plots. Finally, in the bottom plot of each subpanel, we present the ratios for PDF weights samples, with three different thresholds: 0, 0.1 and 0.5.} 
+\label{fig:fig5}
+\end{center}
+\end{figure*}
+
+\section{Results}\label{sec:results}
+%In this section, we show how the clustering depends on the different photo-z quantities used for choosing galaxies in redshift bins. First, in subsection \ref{sec:res1} we compare 
+%the pixel-based method with the point-to-point techniques in order to justify our choice of estimator. Then, we present in subsection \ref{sec:res2}
+%results for four different z-bins configurations: $\Delta z=\{0.1,0.15,0.2,0.3\}$. For each configuration we show the correlations computed when using the true redshift, $z_s$, mean redshift of each galaxy, $\bar{z}$, the best-fit redshift $\hat{z}$ and finally, 
+%the correlations when using the PDF weight for each galaxy. In the latter case we applied different cuts to the weights. Finally, in subsection \ref{sec:res3} we use the galaxy bias as a metric to determine which is photo-z definition works better.
+
+\subsection{Comparison between direct pair counting and pixel-based estimators}\label{sec:res1}
+As shown in \pcite{wang13}, the pixel-based and the point-to-point pair count methods yield similar results for 2-point angular clustering. However, it was considering 
+full galaxy selections in bins, i.e., weights of $f_z=1$. In Figure \ref{fig:fig4}, we compare the results for both pair count and pixel-based methods when considering galaxy 
+weights in the redshift bin $1.0<z<1.2$ and a threshold $p_{threshold}=0.1$ for the angular range $0.1<\theta<1.0$., finding a good agreement. The number of jackknife regions is 
+different in the two cases, being $N_{JK}=32$ for the point-to-point case and $N_{JK}=384$ when considering the pixel-based estimator. Given the agreement, we decided to use the pixel-based estimator in the rest of the paper because it is less expensive computationally
+
+\subsection{Clustering amplitude}\label{sec:res2}
+We now focus our analysis on the relative amplitude between the angular clustering signal using different photo-z selection criteria and the 
+true redshift clustering. This allows us to study directly how the different statistical definitions of photometric redshift change the measurement signal.
+
+%%%%
+In the analysis we divide the redshift range $0.2<z<1.4$ into different numbers of bins, in order to consider different bin configurations. As a result, a comparison between individual redshift bins for different bin configurations may be considering different redshift regions for each configuration. For this reason, we show here clustering results for bins with different widths but symmetrical about a given central redshift. In Figure \ref{fig:fig5} we present the the ratios of the photometric redshift clustering with respect to the true redshift clustering, for different statistical estimators and a redshift bin centered at $z=1$. We considered four different bin widths. 
+
+In the left panels, we show the results for a broad bin of $\Delta z=0.3$ in the redshift range $0.85<z<1.15$. As expected, for all algorithms the amplitude of the clustering of the photometric sample is smaller than the case with the true redshift sample, due to the photo-z random dispersion that is well understood 
+by a broader $n(z)$ for photometric samples.  Notice that the clustering measurements when using the mode, $\hat{z}$, and mean, $\bar{z}$,
+estimators are similar, evaluating the ratios with respect to the true clustering. 
+These small differences are due to the fact that each selection produces a different $n(z)$ when individual PDFs are not symmetric, like the one shown in Figure \ref{fig:fig1}.  
+
+In the bottom panels we show the clustering ratios with respect to true clustering, and a comparison with the red dashed line that corresponds to the ratio for $\hat{z}$, of the clustering signals when using PDF weights,  
+for different probability thresholds. This allows us to both clean our sample, as if using a quality cut, and sample  
+thinner radial profiles. The thresholds considered are $p_{threshold}={0.0,0.1}$.  The signal depends on the cut on the selection of 
+weighted galaxies. The stronger the cut, the cleaner the sample and the the clustering amplitude increases, as well as the intrinsic $n(z)$. But this may also bias our results as we may be changing the average galaxy types of the sample, as discussed in \pcite{marti14}. Here we considered a low threshold but non-negligible to compare with the full PDF case.
+
+We consider narrower bin configurations in order to test what happens as we approach the intrinsic photo-z dispersion error, summarized in Figure \ref{fig:fig3}. 
+We see in the case when $\Delta z=0.2$ that the amplitude of the 
+true redshift clustering increases because the signal is proportional to $n(z)^2$, as explained by Equation (\ref{eq:wtheta}), and in the top hat case, this means that it is inversely proportional to $(\Delta z)^2$. The bin considered in this case for 
+galaxy selection is  $0.9<z<1.1$. We see that the differences between the mode and the mean are bigger than in the previous case with $\Delta z = 0.3$. This may be produced by the fact that when we consider bins much bigger than the intrinsic separations the differences between photo-z single statistic estimators are smaller.
+As we extend the comparison to smaller widths, $\Delta z=0.15$ ($0.925<z<1.075$), the ratio between the angular clustering signal for the photometric samples and the sample with true redshift becomes smaller, in agreement with the trend we saw before,  as $w(\theta)\propto (1/\Delta z)^2$ for true redshift clustering, while the photo-z dispersion keeps the corresponding signal diluted in the radial direction.
+
+%We also observed that the amplitude of the angular correlation when we use the PDF weights with a cut of $p_{threshold}=0.5$ is closer to the amplitude of the correlation in true redshift space than the amplitudes of the correlations obtained when using single statistical quantities. This may be due to the fact that, although the radial information is suppressed, when using PDFs we are using more radial information than with single quantities.
+The case with $\Delta z=0.1$ ($0.95<z<1.05$) shows the same trend than the previous cases with bigger bin widths. The ratio of the photometric redshift signals to the true redshift signal keeps getting smaller. The results with mean and mode estimators tend to converge as the bin width approaches the photo-z dispersion error. 
+
+We found that the evolution of the clustering amplitude with bin width evolves differently for the different estimators. 
+%\MCK{We discussed this before, but it'd be interesting to see how these amplitudes change for a given angle (or two) as a function of bin configuration, there should be a slight convergence and this might depend on the estimator}
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.5\textwidth]{../Plots/bccw500sqdeg_tpz_zs_All_zmode_zmean_andod0p8_z_0p2_1p4_nz6_bin_33.pdf}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.45\textwidth]{Figures_paper/Fig7.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.45\textwidth]{Figures_paper/Fig7_nozconf.pdf}
+\caption{We present the evolution of the clustering amplitude at $\theta=0.1$, for a redshift bin centered at $z=0.5$, with bin width, $\Delta z$. We show the evolution for the true redshift 
+case and for the photometric redshift estimators considered in order to see when the clustering signal saturates with bin width.} %We found that bins smaller than $\Delta z=0.15$ the 
+%photo-z clustering amplitude dependance with the bin width becomes smaller.}
+\label{fig:fig5b}
+\end{center}	
+\end{figure}
+\begin{figure*}
+\begin{center}
+\begin{tabular}{cc}
+\includegraphics[trim = 1cm 0cm 0cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_zs_zphz_nzzmean_bias_1200sqdeg_nz4_mag24_theta_nolin_camb_10mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf} 
+\includegraphics[trim = 0cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_zs_zphz_nzzmean_bias_1200sqdeg_nz6_mag24_theta_nolin_camb_10mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf} \\
+\includegraphics[trim = 1cm 0cm 0cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_zs_zphz_nzzmean_bias_1200sqdeg_nz8_mag24_theta_nolin_camb_10mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf}
+\includegraphics[trim = 0cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_zs_zphz_nzzmean_bias_1200sqdeg_nz12_mag24_theta_nolin_camb_10mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf}\\
+\end{tabular}
+\caption{\emph{Bias evolution for different redshift bin configurations:} We show the evolution with redshift of the linear galaxy bias, when dividing the full range in redshift bins. We present results for the different bin widths and the different photometric redshift estimators described in section \ref{sec:estimators}. We show the spectroscopic redshift results (blue shadow), mean photo-z (black star), mode photo-z (red triangle) and photo-z PDF weights (green cross). Notice that the spectroscopic sample in each bin is different than the corresponding photo-z sample in the same bin and we cannot directly compare them. The x-axis position is given by the mean redshift in each bin according to the $n(z)$, given by PDF stacking.}
+%\caption{\emph{Bias evolution for redshift shells of width $\Delta z = 0.3$:} We show the evolution with redshift of the linear bias, when dividing the full range in four redshift bins. We show this for the different galaxy for the different photometric redshift estimators. The x-axis position is given by the mean redshift in each bin according to the $n(z)$ on the bin given by the stacking of PDFs for the corresponding galaxies or weights.}
+\label{fig:fig9}
+\end{center}
+\end{figure*}
+
+
+\begin{figure*}
+\begin{center}
+\begin{tabular}{cc}
+%\includegraphics[trim = 1cm 0cm 0.9cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig8r.pdf} 
+%\includegraphics[trim = 0.9cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig9r.pdf} \\
+%\includegraphics[trim = 1cm 0cm 0.9cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig10r.pdf}
+%\includegraphics[trim = 0.9cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig11r.pdf}\\
+%\includegraphics[trim = 1cm 0cm 0.9cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_comptruenz_nzzmean_bias_1200sqdeg_nz4_mag24_theta_0p1_1p0_camb_rsd_legend.pdf} 
+%\includegraphics[trim = 0.9cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_comptruenz_nzzmean_bias_1200sqdeg_nz6_mag24_theta_0p1_1p0_camb_rsd_legend.pdf} \\
+%\includegraphics[trim = 1cm 0cm 0.9cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_comptruenz_nzzmean_bias_1200sqdeg_nz8_mag24_theta_0p1_1p0_camb_rsd_legend.pdf}
+%\includegraphics[trim = 0.9cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_comptruenz_nzzmean_bias_1200sqdeg_nz12_mag24_theta_0p1_1p0_camb_rsd_legend.pdf}\\
+%\includegraphics[trim = 1cm 0cm 0.9cm 0.5cm, width=0.48\textwidth]{Figures_paper/%Fig_comptruenz_nzzmean_bias_1200sqdeg_nz4_mag24_theta_nolin_camb_4mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf} 
+%\includegraphics[trim = 0.9cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/%Fig_comptruenz_nzzmean_bias_1200sqdeg_nz6_mag24_theta_nolin_camb_4mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf} \\
+%\includegraphics[trim = 1cm 0cm 0.9cm 0.5cm, width=0.48\textwidth]{Figures_paper/%Fig_comptruenz_nzzmean_bias_1200sqdeg_nz8_mag24_theta_nolin_camb_4mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf}
+%\includegraphics[trim = 0.9cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/%Fig_comptruenz_nzzmean_bias_1200sqdeg_nz12_mag24_theta_nolin_camb_4mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf}\\
+\includegraphics[trim = 1cm 0cm 0cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_reldiffmeanz_pdf_truez_bias_1200sqdeg_nz4_mag24_theta_nolin_camb_10mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf} 
+\includegraphics[trim = 0cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_reldiffmeanz_pdf_truez_bias_1200sqdeg_nz6_mag24_theta_nolin_camb_10mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf} \\
+\includegraphics[trim = 1cm 0cm 0cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_reldiffmeanz_pdf_truez_bias_1200sqdeg_nz8_mag24_theta_nolin_camb_10mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf}
+\includegraphics[trim = 0cm 0cm 1cm 0.5cm, width=0.48\textwidth]{Figures_paper/Fig_reldiffmeanz_pdf_truez_bias_1200sqdeg_nz12_mag24_theta_nolin_camb_10mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf}\\
+\end{tabular}
+\caption{\emph{Relative bias between PDF stacking and true redshift distributions:} We show the relative differences in the galaxy bias measurements when measuring the redshift distribution using PDF stacking with respect to the bias measurements given by the true redshift distribution. This is done for the three photo-z selection methods and the four redshift bin widths considered in this paper. Notice that for each method we are using the sample photometric sample in each bin but we are fitting the galaxy bias using different redshift distributions.}
+%\caption{\emph{Bias evolution for different redshift bin configurations:} We show the evolution with redshift of the linear galaxy bias, when dividing the full range in redshift bins. We present results for the different bin widts and the different photometric redshift estimators described in section \ref{sec:estimators}. The x-axis position is given by the mean redshift in each bin according to the $n(z)$, given by PDF stacking or the true redshift distribution of each photometric sample. We observe that if we use single statistical estimators for the photo-z the error there is an overestimation on the galaxy bias when stacking PDFs. This effect is smaller if we use photo-z PDF weights for the number counts in redshift bins, especially when considering narrow bins.}
+%\caption{\emph{Bias evolution for redshift shells of width $\Delta z = 0.3$:} We show the evolution with redshift of the linear bias, when dividing the full range in four redshift bins. We show this for the different galaxy for the different photometric redshift estimators. The x-axis position is given by the mean redshift in each bin according to the $n(z)$ on the bin given by the stacking of PDFs for the corresponding galaxies or weights.}
+\label{fig:fig10}
+\end{center}
+\end{figure*}
+We show in Figure \ref{fig:fig5b} the clustering amplitude evolution at $\theta=0.1$ for the angular correlations shown in Figure \ref{fig:fig5}. For photometric redshift estimators the clustering signal increases by about $50\%$ when increasing the numbers of bins by a factor of 4. Therefore, increasing the number of bins is not an efficient process for any photo-z estimator, from the point of view of clustering measurement, especially for bins with a width smaller than $\Delta z=0.15$, which is twice the mean photo-z error, as shown in Figure \ref{fig:fig3}.
+
+
+%\begin{figure}
+%\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig9.pdf}
+%\caption{\emph{Bias evolution for redshift shells of width $\Delta z = 0.2$:} Linear bias best fit in six redshift bins of width $\Delta z=0.2$ for different redshift estimators.}
+%\label{fig:fig10}
+%\end{center}
+%\end{figure}
+\subsection{Bias measurement}\label{sec:res3}
+\subsubsection{PDF redshift distributions}
+We next evaluate how the selection of galaxies in radial shells when
+using different photo-$z$ estimators affects the information on 
+the linear galaxy bias $b_g$, defined in Equation (\ref{eq:bias}). Fitting the galaxy bias or any cosmological parameter can help us to calibrate the 
+effect of photo-z estimators. We only used angular auto-correlation 
+functions and one galaxy bias parameter per redshift bin. The total redshift range considered is $0.2<z<1.4$ and all the bins have the same width for 
+each configuration. The angular range considered was set to cover the co-moving coordinates range $10 h^{-1}Mpc<r<60 h^{-1}Mpc$ which corresponds to different angular ranges in each redshift bin. The minimum scale was selected by testing at which scale the linear growth model for the spatial correlation departs from a non-linear model. Notice that this is a conservative cut, compared with the cuts used in \cite{crocce15}. This corresponds to $\theta_{min}=0.8$ degrees at the lowest redshift and $\theta_{min}=0.19$ degrees at highest redshift bin. 
+
+The comparison between the different photo-z selection methods is done by comparing each galaxy bias measurement with the true result, which is determined by using the true redshift distribution of the selected galaxies, in order to do a fair comparison.  But first of all, we show in Figure \ref{fig:fig9} the photometric redshift measurements and the measurement done by selecting galaxies according to the spectroscopic redshift. Notice that the spectroscopic sample in each bin is different than the photometric samples considered, but this way we can study how the photo-z survey measurements compare with an spectroscopic one. 
+
+In panel {\it a} of  Figure \ref{fig:fig9} we show the evolution of galaxy bias for the broad $\Delta z=0.3$ bin configuration. We only show results for true redshift, $z_s$, mode redshift, $\hat{z}$, mean redshift, $\bar{z}$ and the PDF weighted samples for clarity. We do not show here the results when applying quality cuts. The measurements are similar and the slightly different values for the different estimators are within statistical error bars. This is reasonable as we considered broad redshift bins and the differences between different photometric samples redshift distributions are small. 
+
+The same trend is observed when considering $N_z=6$ redshift bins, panel {\it b} on Figure \ref{fig:fig9}. This case corresponds to bins with $\Delta z = 0.2$ width, which is larger than twice the photo-z dispersion and therefore photometric redshift effects are still not the biggest issue. The evolution of linear galaxy bias with redshift reseambles  the one shown in Figure 17 of \pcite{crocce15} for a MICECATv2.0 \cite{carretero15} sample, as the ratio $b_g(z=1.1)/b_g(z=0.3)$ is similar for both simulations.
+%If we consider the case with more ($N_z=6$) redshift bins, panel {\it b} on Figure \ref{fig:fig9}, we obtain the same bias evolution and similar results.
+%We observe that around redshift $z=0.4$ the bias obtained by using photometric samples is overestimated. This 
+%may be related to the dispersion feature observed in Figure \ref{fig:fig3b} at those redshifts. This can be produced by the lack of u-band in the set of DES filters and the 
+%fact that the 4000 \AA line changes from filter g to r \cite{leistedt2015}. 
+
+We show in the lower left plot in Figure \ref{fig:fig9} the measurement of the bias for the different redshift estimators when considering $N_z=8$ redshift bins. We observe bigger differences between the 
+case when using photometric redshifts and the case when the bias was obtained using spectroscopic redshifts, compared with the previous cases with larger bin widths. %This may be produced by the fact that when considering stacked PDFs, we are including also the tails of the distribution. The smaller the bin width, the bigger the effect of the tails on the $n(z)$.
+
+Finally, we show in the bottom right panel on Figure \ref{fig:fig9} the bias evolution when using $12$ bins of width $\Delta z=0.1$. The differences between the photo-z galaxy bias results from the spectroscopic are larger than for the previous cases with broader bin configurations. The closest result to the spectroscopic results value of the bias is obtained when using the full PDF information $(p_{threshold}=0$), especially at intermediate redshifts.
+
+
+We show in Figure \ref{fig:fig10} the measurement bias between the method that uses PDF stacking to estimate n(z) and the true value, given by the n(z) measured directly from the simulation true redshift of the photometric sample. We show in the top left panel the relative differences when considering $\Delta z=0.3$ for the three methods and we found small deviations with respect to the true results and not big differences between the different selection techniques. The observed differences exist because 
+the PDF stacking technique is not perfectly reconstructing the true n(z) of the population sample in tomographic bins. In this case the differences are small because the bin width is broad and photo-z systematics in the n(z) are smaller.  
+
+When we decrease the bin width to $\Delta z = 0.2$, the differences grow, as shown in the top right panel of Figure \ref{fig:fig10}. The three methods are still producing similar results and because the bins are still too broad the zero relative bias is within the error bars. 
+
+When the configuration consists on bins with $\Delta z=0.15$ widths differences start to become more relevant and also the PDF weighting method becomes to differ from the single point estimate estimators. 
+
+For the narrowest bin width configuration considered, $\Delta z = 0.1$ the differences at intermediate redshifts are larger than $5\%$ for single point estimators, whereas for PDF weighted galaxy samples these differences are around $3\%$. We include a table in Appendix \ref{sec:ap2} showing all the galaxy bias measurements and relative differences with the true results. 
+
+In order to summarize and quantify these results, we show in Figure \ref{fig:fig13} the mean value of the mean absolute deviation for each selection method and each bin configuration with respect to the true result. 
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig_evolution_percent_deviation_phz_defintions.pdf}
+\caption{Evolution with redshift bin width of the percentual mean absolute deviation with the true result for the different photometric estimators. We shifted the x-axis values artificially in order to show clearly the results from different measures. We found an accumulated measurement bias when using 
+photo-z redshifts. This deviation is smaller when using PDF weights in the clustering measurements, especially for the narrower bin configurations.}
+\label{fig:fig13}
+\end{center}
+\end{figure}
+We found that for the largest bin widths the differences are around $1\%$ and similar for the three photo-z selection methods (mean, mode, pdf weighting) but for the narrower bin the deviation when we consider summary statistics is around $5\%$ while it is $3\%$ when using the photo-z PDF galaxy weighting method proposed here.
+
+
+\subsection{Reducing the redshift bin catalogue size}
+Using full PDF information in galaxy clustering produces less biased measurements than point estimate photo-z methods but increases the amount of information 
+that we have to store in each redshift bin galaxy sample. We studied how a Monte Carlo sampling of the PDF, in order to define a point estimate that encloses more PDF than the mean or the mode, or applying a threshold cut based on the amount of PDF in each bin compare with the full PDF inclusion method.
+
+\subsubsection{Monte Carlo sampling redshift}
+We extended the analysis to Monte Carlo sampling redshift, $z_{MC}$, in order to assign a redshift value based on the cumulative distribution function of each galaxy and then select them in the different redshift bins according to $z_{MC}$. In Figure \ref{fig:fig11b} we show the best fit galaxy bias for galaxies selected according to  $z_{MC}$ in $N_z=8$ redshift bins of $\Delta z = 0.15$.
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig_orange_zMC_comptruenz_nzzmean_bias_1200sqdeg_nz8_mag24_theta_nolin_camb_10mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf}
+\caption{\emph{Bias evolution for Monte Carlo sampling redshift shells of width $\Delta z = 0.15$:}  Bias measurement in $8$ redshift bins for Monte Carlo sampling redshifts (orange). We consider the cases with $n(z)$ estimated using PDF stacking and the true $n(z)$. We also compare the galaxy bias fitting with the PDF weights results from figure \ref{fig:fig9} (green). The standard performance of Monte Carlo redshifts is similar to the results given by PDF weights.}
+\label{fig:fig11b}
+\end{center}
+\end{figure}
+We observe that in this case the results are similar to the results given by PDF weights (taken from Figure \ref{fig:fig9} c), both when using PDF sampling or true redshift distributions. This is expected as we are using the probabilistic information to determine the Monte Carlo sampling redshifts. %This method can be considered in real surveys in order to define galaxy catalogues used to measure the correlations but we would still need the full PDF catalogue in order to estimate PDF or perform any other photometric redshift tests.
+
+
+%\subsubsection{Parametrized bias redshift evolution}
+%We also performed a fit to a single parameter defined in Equation (\ref{eq:bias_ev}) that defines the 
+%galaxy bias at redshift $z=1$. We performed this analysis for every estimator.
+%\begin{figure}
+%\begin{center}
+%%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig13.pdf}
+%\caption{Evolution with redshift bin width of the ratio between $b_{\star}$ for the different photometric estimators and the fitted value when using true redshift 
+%correlations. We shifted the x-axis values artificially in order to show clearly the results from different measures. We found an overall estimation on the galaxy bias when using 
+%photo-z redshifts. This correction is smaller when using PDF weights in the clustering measurements.}
+%\label{fig:fig13}
+%\end{center}
+%\end{figure}
+%Figure \ref{fig:fig13} shows that for the broadest redshift bins all the estimators give a similar result with respect to the value obtained for true
+%redshifts (an overestimation of $2\%$). %If we reduce the width of the bins, we see that the best estimator are both the mean and the mode but when applying a quality cut, 
+%%although when we move towards 
+%%smaller bins the closest results to the true redshift clustering correspond to the clustering of PDF weights both with a small threshold cut or any cut. The results with a 
+%%quality cut improve for the 6 bin configuration because it is an intermediate stage between the $\Delta z=0.3$ bins, which are too broad for this effect, and the narrow bins where 
+%%the difference between uncleaned samples and the sample with the quality cut is small.
+%We also observe that 
+%the ratio between the photometric results and the true results does not change once we consider bin configurations smaller than $\Delta z=0.15$, when considering single estimators. The gain when using smaller bins consists of reducing the projection effect from 3D to 2D analysis, but if the bin width is comparable to the photo-z error then the radial clustering information is quite noisy and therefore the use of smaller bins does not add extra radial information.
+
+%
+%The theoretical computation of the angular correlation functions depends on the $n(z)$, as shown in Equation (\ref{eq:wtheta}). In Figure \ref{fig:fig13} we used $n(z)$ given by the stacking of the PDFs of galaxies considered within each redshift bin for all the cases. In Figure \ref{fig:fig14} we add the results obtained 
+%when using the $n(z)$ given by stacking the true redshift of each photometric galaxy considered in the bin.
+%\begin{figure}
+%\begin{center}
+%%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig14.pdf}
+%\caption{\emph{Comparison between bias results using the true redshift distribution and PDF stacking.} In this Figure we compare the dependence of the ratio $b_{\star}(z_{phz})/b_{\star}(z_s)$ with the bin width and when using $n(z)$ constructed in different ways. Solid lines 
+%correspond to the fitting using $n(z)$ obtained by stacking the PDF of galaxies while dotted lines correspond to the case with $n(z)$ given by the histogram of true redshifts of the photometric sample. The figure shows that if we know the true redshift distribution we recover the true redshift results.}
+%\label{fig:fig14}
+%\end{center}
+%\end{figure}
+%The results are similar except for the last bin, in which the use of the histogram $n(z)$ produces closer results to the real sample than
+%using the window functions obtained stacking galaxy PDFs, especially when using the mode redshift $\hat{z}$ with the quality cut (\emph{zConf}$>0.8$). This may be due to the fact that 
+%stacking the PDFs for galaxies includes the tails and therefore more counts in the redshift range beyond the actual distribution of galaxies in true-z space for each 
+%photometric bin. A broader n(z) implies a smaller dark matter angular correlation and therefore, a higher bias measurement, especially when decreasing the bin width. 
+%When considering PDF weights in the corresponding photometric redshift bins with a low threshold or no threshold at all, we also found a better agreement  to the true result. In this case, 
+%we used the full PDF framework both for the clustering measurements and for the theoretical estimation using the $n(z)$ given by stacked PDFs and therefore, the 
+%results are less biased than when considering single value statistics for the galaxy selection in tomographic bins.  
+
+%We considered a fit to the galaxy bias using different photo-z estimators and different techniques to obtain the true redshift distribution $n(z)$ as a way to calibrate the effect of photo-z PDFs on cosmological analysis. If we use the true $n(z)$ we found that photometric redshift results are the same than true redshift results but when we use PDF stacking to obtain $n(z)$ there is a global offset and in this case an overestimation of the galaxy bias by a few percent. The smaller offset with respect to the true result is given when we consider galaxy maps in each redshift bin according to PDF weights.
+
+\subsubsection{Quality cuts}
+The effect of sparse PDFs with multiple peaks can introduce significant noise in our PDF weighting scheme. 
+Although it is not the main interest of this paper, we considered a case in which we applied a threshold cut $f_z>(p_{threshold}=0.1)$ in 
+order to select galaxies in the different bins. The effect is a combination of a quality cut but also a cut on galaxies that are not in the bin but 
+whose tails are inside the bin, making the maps bigger. In figure \ref{fig:figqual} we show a comparison between the a photo-z sample selected 
+according to full PDFs for 
+a configuration with bin width $\Delta z=0.15$ and a a sample selected by applying a threshold to the PDF weights of $f_z>0.1$.
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig_pdfqualitycut0p1_nzzmean_bias_1200sqdeg_nz8_mag24_theta_nolin_camb_4mpctp60Mpc_ns_rsd_nz_pdfnz_truenz.pdf}
+\caption{\emph{PDF threshold cuts:} In this Figure study the effect of applying a threshold cut on the selection process with photo-z PDF weights for 
+a the configuration with a redshift bin width of $\Delta z=0.15$. Both samples produce similar galaxy bias measurements.}
+\label{fig:figqual}
+\end{center}
+\end{figure}
+We found that the results are similar, enhancing the idea of applying threshold cuts to reduce the size of each galaxy 
+density map per pixel, although cuts to a sample have to be applied carefully in order to 
+avoid introducing selection biases to the sample, see \pcite{marti14}. We can observe that in Figure \ref{fig:figqual} as the true results for both samples are not exactly equivalent, 
+A detailed study the quality cuts using PDF information outside the scope of this paper. 
+
+\subsection{Systematics}
+\subsubsection{Training set sample variance}
+Since we use one galaxy sample from one particular pixel of the simulation for our photo-z training set, we wanted to demonstrate 
+that the choice of this one pixel did not bias our results. As a result, we compared the spectroscopic n(z) 
+for the galaxies in our training sample with the mean spectroscopic n(z) from ten randomly selected 
+galaxy samples from the entire area, to demonstrate that our results were not dependent on the choice of a particular pixel. We are not, in this paper, 
+exploring the more traditional concept of photometric redshift ‘sample variance’ as discussed, for example, in \pcite{cunha12}.
+
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig_train_1.pdf}
+\caption{\emph{Training set sample variance:} Relative differences between the amplitude of the theoretical dark matter angular correlations when we consider the spectroscopic n(z) of the training set or the mean n(z) for ten samples with the same number of spectroscopic objects than the training set distributed on the catalogue area. We considered the full redshift range $0<z<2$ and a redshift bin $0.3<z<0.5$. We found a relative bias in the angular range $0.1<\theta<1$ smaller than $2\%$, that propagates to an error smaller than $1\%$ for the galaxy bias which is lower than the observed effect due to photo-z definitions.} 
+\label{fig:fig15}
+\end{center}
+\end{figure}
+We show in Figure {\ref{fig:fig15}} the relative difference between theoretical angular correlations, computed using Equation (\ref{eq:wtheta}), when we used the training set n(z) (red line in Figure \ref{fig:fig2}) and the mean n(z) of ten different random samples extracted from the catalogue with the same number of galaxies than the training set, which is similar to the blue solid line in Figure \ref{fig:fig2}.  We found relative differences smaller than $2\%$ in the redshift range $0.1<\theta<1$. This implies a relative difference smaller than $1\%$ for the galaxy bias, which is lower than the differences observed according to the use of different photo-z estimators. 
+
+\subsubsection{True redshift distribution reconstruction}
+As observed in section \ref{sec:res3}, the main difference between the galaxy bias measurement and the true result is due to the failure to recover the true redshift. distribution $n(z)$. As an example, in Figure \ref{fig:fignzrecgauss} we show the difference between the true redshift distribution (blue line) and the PDF stacking PDF (green dashed line) for  galaxies selected with mean redshift within $0.65<z<0.8$.  
+\begin{figure}
+\begin{center}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Gaussian_error_pdf_paper_3.pdf}
+\caption{\emph{Redshift distribution reconstruction:} In this Figure, we show the PDF stacking n(z) (dashed green) and the true redshift distribution (blue) obtained by selecting galaxies with mean photometric redshift in the redshift bin $0.65<z<0.8$. The red region covers the space between the n(z) obtained by stacking gaussian PDFs for the galaxy sample with standard deviation within $\sigma_{gauss}=0.03-0.1$. The differences between redshift distributions are contained within the photo-z error.}
+\label{fig:fignzrecgauss}
+\end{center}
+\end{figure}
+The red shadowed region shows the range between n(z) created by stacking gaussian PDFs with standard deviations in the range $\sigma_{gauss}=0.03$ to $\sigma_{gauss}=0.1$. We see that  the difference between the measured n(z) is within the accuracy of the photo-z catalogue, shown in Figure \ref{fig:fig3}. 
+
+In Appendix \ref{sec:ap3}, we show differences between the n(z) obtained through PDF stacking of galaxies selected in redshift shells according to the mean redshift and the true distribution of the same sample for the different bin configurations and different redshift ranges.
+
+%\section{Discussion/Conclusions}\label{sec:discussion}
+%%We measured the angular clustering of the BCC galaxy catalogue using different redshift estimates. In addition, we saw that when using single statistical quantities, it is better to use the $\hat{z}$ than $\bar{z}$ as the clustering amplitude is bigger in the first case. 
+%We studied how the angular galaxy clustering obtained from photometric populations depends on the different statistical estimators used 
+%for the sample selection in redshift bins. The estimators that we have considered are the mean and the mode of the photo-$z$ PDF, either using
+%all the galaxies in the sample or a cleaned sample according to the concentration parameter, \emph{zConf}, of each galaxy. We found differences between the different 
+%estimators because the true redshift distributions of galaxies selected when considering different estimators are different. The clustering signal is different when 
+%using the mean or the mode photometric redshift. The signal is stronger when we consider quality cuts but the differences with the case without any cut decreases 
+%when we increase the number of redshift bins considered. 
+
+%We also included the full information of the PDF in the clustering analysis. We did that by weighting each galaxy according to the 
+%integrated probability of the galaxy in each redshift bin. The strongest photometric clustering signal is produced by galaxies with PDF weights greater than $p_{threshold}=0.5$, while the smaller signals correspond to the case with no threshold or with a threshold cut given by $p_{threshold}=0.1$. This is explained by the fact that when we consider a bigger threshold the corresponding $n(z)$ is narrower than when considering all the galaxies with non negligible weights in a redshift bin. Applying a threshold is a combination of applying a quality cut and a sub-sample selection, as we use only galaxies with higher probability to lie within the bin. 
+
+%We extended the comparison between the different definitions of photometric redshift to a cosmological parameter estimation analysis by fitting the linear galaxy bias in different redshift bins. We found that, in general, the photo-z estimators produce similar results in terms of cosmological 
+%parameter estimation (galaxy bias only). We found that if we do not have the true redshift distribution information there is a correction that depends on the estimation. The galaxy bias given by photometric galaxies is bigger than the true bias and the overestimation increases as we decrease 
+%the redshift bin width. The closest photometric results to the true bias are obtained when we use PDF weights with almost no threshold on the weights values. Therefore, the correction is smaller when using PDF weights. \JABg {We can use simulations to calibrate the corresponding corrections in order to apply that to data. We considered the galaxy bias as the test metric in this case but any other cosmological parameter can be considered for this kind of photo-z calibration. }  
+
+%Another consequence from the galaxy bias parameter estimation results is that if we use single statistic quantities for the definition of photometric redshifts and $n(z)$ given by the stacking of the PDF of each galaxy we may be overestimating the galaxy bias. If we use the real distribution in true space, we found that the bias measurements are closer to the 
+%true-z results. But we cannot use that information with real photometric surveys because we only know the true redshifts for the galaxies in the training sets. We found that 
+%if we use consistently the PDF weights introducing them in the angular correlation measurements and in the $n(z)$ measurement we achieve closer 
+%results to the galaxy bias obtained when considering the true redshift sample, especially for the thinner bin configurations. Therefore, we should use the PDF weights for the clustering measurements and for the $n(z)$ determination to avoid biased results. \JABg{We found consistent results between an analysis that include every galaxy with a non negligible probability to be in a given redshift bin and a threshold cut of $10\%$. As creating maps with PDF weights involves bigger amounts of data than maps of galaxies selected 
+%by redshift therefore is better to apply a low threshold when considering PDF weights.}
+
+%\MCK{The whole paper is based on the availability of the PDFs, and the message is clear. But I guess we need to say few words on what's the recommendation when the PDFs are not available, like ... you are making a mistake not using PDFs but well you can do less damage if …}\JAB{In the situation in which we do not have reliable photometric redshift PDFs the closer results to the true galaxy bias are given when using a single statistical estimator with the corresponding quality cut. (but this also requires a PDF!!!)}
+
+\section{Discussion}\label{sec:discussion}
+We studied how the angular galaxy clustering obtained from photometric populations depends on the different statistical estimators used 
+for the sample selection in redshift bins. The estimators that we have considered are the mean and the mode of the photo-$z$ PDF. 
+We found differences between the different 
+estimators as they define different galaxy samples in each top hat photometric redshift bin. Therefore, the clustering signal is different when 
+using the mean or the mode photometric redshift. 
+
+We also included the full PDF information in the clustering analysis. We did that by weighting each galaxy according to the 
+integrated probability of the galaxy in each redshift bin. The clustering signal is smaller than the clustering signal of single point estimates samples. If we apply a selection  threshold cut given by $p_{threshold}=0.1$ the signal amplitude increases. This is explained by the fact that when we consider a larger threshold the corresponding $n(z)$ is narrower than when considering all the galaxies with non negligible weights in a redshift bin but also we may be sampling different type of galaxies as we use only galaxies with higher probability to lie within the bin. 
+
+We extended the comparison between the different definitions of photometric redshift to a cosmological parameter estimation analysis by measuring the linear galaxy bias in different redshift bins. We also found that, in general, the photo-z estimators produce similar results, especially when considering broad bins. We found that there is a relative bias with respect to the true galaxy bias results because the PDF stacking redshift distributions in each bin differ from the true redshift distributions. For narrow bins, the selection method given by PDF weights produces less biased differences with respect to the true results. The mean deviation for a bin configuration with width $\Delta z=0.1$ is a $3\%$ when using PDF weights while it is a $5\%$ when using summary or single point estimate statistics. Therefore the use of photo-z PDF weights to select galaxies in tomographic redshift bins in order to measure the galaxy clustering in a photometric survey is more optimal than using single estimates.   
+We can also use the same methodology used in this paper to calibrate the effect of the photo-z bin galaxy selection in the 
+model parameters with simulations mimicking the real data catalogues. This applies to other photo-z methods that estimate PDFs 
+as the have similar behaviours \cite{sanchez14,bonnet15,leistedt2015}. 
+
+Creating maps with PDF weights involves bigger amounts of data than catalogues of galaxies selected 
+by redshift. One way to reduce the amount of data is to apply a cautious PDF quality cut by using a threshold when considering PDF weights. We found similar results 
+to the full PDF results although any cut on a sample has to be previously tested.
+Another way to reduce the size of the catalogues but still including to a certain level PDF information is by using Monte Carlo Sampling point estimates. 
+We found that Monte Carlo Sampling estimators produce similar results to PDF weight results.
+
+The effect of choosing different training sets on the galaxy bias measurement is smaller than $1\%$. which is lower than the effects due to photo-z definitions measured in this paper. Also, the differences between PDF stacking redshift distributions and the true redshift distributions are within the photo-z errors.
+
+
+%Another consequence from the galaxy bias parameter estimation results is that if we use single statistic quantities for the definition of photometric redshifts and $n(z)$ given by the stacking of the PDF of each galaxy we may be overestimating the galaxy bias. If we use the real distribution in true space, we found that the bias measurements are closer to the 
+%true-z results. But we cannot use that information with real photometric surveys because we only know the true redshifts for the galaxies in the training sets. We found that 
+%if we use consistently the PDF weights introducing them in the angular correlation measurements and in the $n(z)$ measurement we achieve closer 
+%results to the galaxy bias obtained when considering the true redshift sample, especially for the thinner bin configurations. Therefore, we should use the PDF weights for the clustering measurements and for the $n(z)$ determination to avoid biased results. We found consistent results between an analysis that include every galaxy with a non negligible probability to be in a given redshift bin and a threshold cut of $10\%$. 
+
+\section{Conclusions}\label{sec:conclusion}
+With photometric surveys we can access a larger number of galaxies in less time than with spectroscopic surveys. However, the lack of true redshifts reduces the amount of 
+radial information on the survey, as photometric redshift are produced from multi-band imaging.  
+
+We need to set a statistical definition of photometric redshift in order to select photometric galaxies in tomographic redshift bins. The search for an optimal definition 
+is the main goal of this paper. The core analysis of this paper consisted on defining a new photo-z selection method that includes the full photo-z PDF information by weighting each galaxy in the redshift bin with the probability to be in that bin and compare it with two methods based on the single point estimates as the mean or the mode redshift.
+
+We found, using mock galaxy catalogues and machine learning photo-z code, that if we use single point estimates, like the mode or the mean, there is an offset on the galaxy bias measurements, which are obtained by measuring redshift distributions by stacking the PDF of the selected galaxies, compared with the true results, defined by the true redshift distribution of the same galaxies. This shift should be taken into account when considering similar Large Scale Structure analysis with photometric surveys. This corrective effect can be estimated applying a similar method to measuring the offset in the determination of cosmological parameters using simulations in similar conditions to the expected photometric data. In our case, we used the galaxy bias as the metric to test photo-z definitions and we found that, for single point estimate redshifts, the cumulative deviation is a $5\%$ for a bin configuration with width $\Delta z= 0.1$.
+
+Results are closer to the truth if we count galaxies according to PDF weights in each redshift bin, being the differences a $3\%$ in the $\Delta z=0.1$ 
+configuration. Therefore, and especially for narrow photometric top hat bins, PDF weighting is more optimal than using 
+single point estimates or summary statistic photometric redshifts.
+
+
+
+\section*{Acknowledgments}
+JA and JJT acknowledge support from U.S. Department of Energy Grant No, DE-SC0009932. ISN would like to thank the Spanish Ministry of Economy and Competitiveness (MINECO) for funding support through grant FPA2013-47986-C3-2-P. RJB acknowledges support from the National Science Foundation Grant No. AST-1313415. RJB has been supported in part by the Center for Advanced Studies at the University of Illinois. This work also used resources from the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number OCI-1053575. We want to acknowledge M. Becker and R. Wechsler for their input regarding the simulation catalogue. We thank all the useful discussions  with DES members and especially the useful discussions with the internal reviewers. This paper has gone through internal review by the DES collaboration. The DES publication number for this article is XXXX. The Fermilab pre-print number is XXX.
+
+
+\begin{thebibliography}{99}
+
+\bibitem[{Aihara et al.}~<2011>]{sdssdr8} 
+Aihara H, Allende Prieto  C., An D., Anderson S. F. ,
+Aubourg E. ,Balbinot  E., Beers T. C.,  Berlind A. A.,  Bickerton S. J., Bizyaev D. , et al.,  2011, ApJS  {\bf 193}, 29
+
+%\bibitem[{Alcock C., Paczynski B.}~<1979>]{alcockpaczynski} 
+%Alcock C., Paczynski B., 1979, Nature  {\bf 281}, 358
+
+\bibitem[{Asorey et al.}~<(2012)>]{Asorey2012} 
+Asorey J., Crocce M, Gazta{\~n}aga E., Lewis A., 2012, MNRAS  {\bf 427}, 1891
+
+%\bibitem[{Banerji et al. }~<2008>]{Banerji2008} 
+%Banerji M., Abdalla F. B., Lahav O., Lin, H., 2008, MNRAS  {\bf 386}, 1219
+
+\bibitem[{Benitez}~<2000>]{BPZ}
+Benitez N., 2000, ApJ {\bf 536}, 571
+
+%\bibitem[{Benitez et al.}~<2009>]{PAU}
+%Benitez N., et al., 2009, ApJ {\bf 691}, 241
+
+%\bibitem[{Benjamin et al.}~<2013>]{benjamin2013}
+%Benitez N., et al., 2013, MNRAS {\bf 431}, 1547
+
+%\bibitem[{Blake et al.}~<2007>]{blake07}
+%Blake C., Collister A., Bridle S., Lahav O., 2007, MNRAS {\bf 374}, 1527
+
+%\bibitem[{Blake} et al.~<2011>]{blake11}
+%Blake C., et al., 2011 ,MNRAS {\bf 415}, 2876B
+
+\bibitem[{Blanton et al.}<2005>]{blanton05}
+Blanton M. R., Schlegel D. J., Strauss M. A., et al., 2005, AJ, {\bf 129}, 2562
+
+\bibitem[{Bonnett et al.}<2015>]{bonnet15}
+Bonnett C. et al., 2015, arXiv e-print:1507.05909
+
+%\bibitem[{Bonvin C., Durrer R.}<2011>]{PhysRevD84063505}
+%Bonvin C., Durrer R., 2011, Phys. Rev. D {\bf 84}, 063505
+
+\bibitem[{Busha et al.}<2013>]{busha2013}
+Busha M. T., Wechsler R. H., Becker M. R., Erickson B., Evrard A. E., 2013, 
+AAS Meeting Abstract, {\bf 221,341}
+
+%\bibitem[{Cabr{\'e} et al.}<2007>]{cabre07} 
+%Cabr{\'e} A., Fosalba P., Gazta{\~n}aga E., Manera M., 2007, MNRAS {\bf 381}, 1347
+
+%\bibitem[{Cabr{\'e} \& Gazta{\~n}aga}~<2009>]{cabre09}
+%Cabr{\'e} A., Gazta{\~n}aga E., 2009, MNRAS {\bf 393} ,1183
+
+%\bibitem[{Cai \& Bernstein} <2012>]{1112.4478} 
+%Cai Y. C., Bernstein G., 2012, MNRAS {\bf 422}, 1045
+
+\bibitem[{Carrasco Kind \& Brunner} <2013>]{tpz} 
+Carrasco Kind M., Brunner R. J., 2013, MNRAS {\bf 432}, 1483
+
+\bibitem[{Carrasco Kind \& Brunner} <2014a>]{sparse} 
+Carrasco Kind M., Brunner R. J., 2014, MNRAS {\bf 441}, 3550
+
+\bibitem[{Carrasco Kind \& Brunner} <2014b>]{bayesian} 
+Carrasco Kind M., Brunner R. J., 2014, MNRAS {\bf 442}, 3380
+
+\bibitem[{Carretero et al.} <2015>]{carretero15} 
+Carretero J., Castander F. J.,   Gazta\nn aga E., Crocce M., Fosalba P., 2015, MNRAS, {\bf 447}, 646
+
+\bibitem[{Chang at al.} <2015>]{chang2015} 
+Chang C., Busha M. T., Wechsler R. H., Refregier A.; Amara A., Rykoff E., Becker M. R., 
+Bruderer C., 2015, ApJ, {\bf 801}, 73
+
+%\bibitem[{Castander et al.}~<2012>]{paucam}
+%Castander F. J., et al., 2012, Proceedings of the SPIE {\bf 8446}, 84466D
+
+%\bibitem[{Challinor \& Lewis}<2011>]{2011arXiv1105.5292C}
+%Challinor A., Lewis A., 2011, Phys. Rev. D {\bf 84}, 043516
+
+\bibitem[{Collister \& Lahav}<2004>]{collister04}
+Collister A. A., Lahav. O., 2004, PASP {\bf 116}, 345
+
+\bibitem[{Conroy, Wechsler \& Kravtsov}<2006>]{conroy2006}
+Conroy C., Wechsler R. H., Kravtsov A. V,  2006, ApJ {\bf 647}, 201
+
+\bibitem[{Crocce, Pueblas \& Scoccimarro}<2006>]{2lpt}
+Crocce M., Pueblas S., Scoccimarro R., 2006, MNRAS {\bf 373}, 369
+
+\bibitem[{Crocce, Cabr{\'e}, \& Gazta{\~n}aga}<(2011)>]{crocce11}
+Crocce M., Cabr{\'e} A., Gazta{\~n}aga E., 2011, MNRAS {\bf 414}, 329
+
+\bibitem[{Crocce et al.}<2015>]{crocce15}
+Crocce M. et al., 2015,  arXiv e-print:1507.05360
+
+\bibitem[{Cunha et al.}<2012>]{cunha12}
+ Cunha C. E., Huterer D., Busha M. T., Wechsler R. H., 2012, MNRAS, {\bf 423}, 909
+ 
+%\bibitem[{Contreras et al.}~<2013>]{contreras13}
+%Contreras C, et al., 2013, MNRAS {\bf 430}, 924
+
+%\bibitem[{Crocce et al.}<2011>]{2011arXiv1104.5236C}
+%Crocce M., Gazta{\~n}aga E., Cabr{\'e} A., Carnero A., S{\'a}nchez E.,
+%2011, MNRAS {\bf 417}, 2577
+
+%\bibitem[{de la Torre et al.}<2013>]{delaTorre2013}
+%de la Torre S., Guzzo L., Peacock J. A., et al., 2013, A\&A submitted,
+%e-print arXiv:1303.2622
+
+%\bibitem[{de Putter R., Dor\'e O. \& Takada M.}<2013>]{dePutter2013}
+%de Putter R., Dor\'e O. \& Takada M., 2013, [eprint arXiv::1308.6070]
+
+%\bibitem[{Dodelson}<2003>]{dodelson}
+%Dodelson, S., 2003, \emph{Modern Cosmology}, p. 342, Eq. 11.27, Academic Press Inc., U.S.
+
+\bibitem[{Dawson et al.}<2013>]{bossover}
+Dawson et al., 2013, ApJ, {bf 145}, id. 10
+
+\bibitem[{Dark Energy Survey Collaboration}<2005>]{desover}
+Dark Energy Survey Collaboration, 2005, arXiv e-print:astro-ph/0510346
+
+\bibitem[{Dark Energy Survey Collaboration}<2015>]{des15}
+Dark Energy Survey Collaboration, 2015, arXiv e-print:1507.05552
+
+\bibitem[{Dolence \& Brunner}<(2008)>]{dolence08}
+Dolence, J. C., Brunner, R. J., 2008, Proceedings of the 9th LCI International Conference on High-Performance Clustered Computing
+
+\bibitem[{Drinkwater et al.}<2010>]{wigglezover}
+Drinkwater M. J. et al., 2010, MNRAS, {bf 401}, 1429
+
+%\bibitem[{Eisenstein \& Hu}<1998>]{eh98}
+%Eisenstein, D.~J., \& Hu, W.\ 1998, ApJ, 496, 605
+
+\bibitem[{Eriksen \& Gazta{\~n}aga}<(2015)>]{eriksen15}
+Eriksen M., Gazta{\~n}aga E., 2015, arXiv e-print:1502.03972]
+
+
+%\bibitem[{Fisher, Scharf \& Lahav} <1994>]{fisher94}
+%Fisher K. B., Scharf C. A., Lahav O., 1994, MNRAS {\bf 266}, 219
+
+%\bibitem[{Fry} <1996>]{Fry1996}
+%Fry, J. N., 1996, ApJ, 461, L65
+
+%\bibitem[{Gazta{\~n}aga et  al.} <2012>]{1109.4852} 
+%Gazta{\~n}aga E., Eriksen M., Crocce M., Castander F. J., Fosalba P.,
+%Marti P., Miquel R., Cabr{\'e} A., 2012, MNRAS {\bf 422}, 2904
+
+%\bibitem[{Gil-Mar\' in et  al.} <2010>]{gil-marin2010} 
+%Gil-Mar{\' i}n H., Wagner C., Verde L., Jimenez R., Heavens A. F.,
+%2010, MNRAS {\bf 407}, 772
+
+\bibitem[{Gerdes et al.} <2010>]{gerdes10}
+Gerdes D. W., Sypniewski A. J., McKay T. A., Hao J., Weis M. R., Wechsler R. H., Busha M. T., 2010, ApJ, {\bf 715}, 823
+
+\bibitem[{Giannantonio et al.} <2015>]{giannantonio15}
+Giannantonio T., et al., 2015, arXiv e-print:1507.05551
+
+\bibitem[{G\'orski et  al.} <2005>]{healpix} 
+G\'orski, K. M.; Hivon, E.; Banday, A. J.; Wandelt, B. D.; Hansen, F. K.; Reinecke, M.; Bartelmann, M.,
+2005, ApJ {\bf 622}, 759
+
+%\bibitem[{Guzzo} et al.~ <2009>]{guzzo09}
+%Guzzo L., et al., 2009, Nature {\bf 541} ,451 
+
+\bibitem[{Hamilton} <1992>]{hamilton92}
+Hamilton A. J .S, 1992, ApJ, {\bf 385}, L5
+
+%\bibitem[{Hamilton} <1998>]{hamilton98}
+%Hamilton A. J. S., 1998,``Linear redshift distortions: A review'', in ``The
+%Evolving Universe'', ed. D. Hamilton, pp. 185-275 (Kluwer Academic,
+%1998) [eprint arXiv: astro-ph/9708102]
+
+\bibitem[{Ilbert et al.} <2006>]{lephare}
+Ilbert O., 2006, AA {\bf 457} , 841 
+
+\bibitem[{Ivezi\'c et al.} <2008>]{lsstcol}
+Ivezi\'c Z. et al., 2008, arXiv e-print:0805.2366
+
+\bibitem[{Kaiser}<1984>]{kaiser84}
+Kaiser N., 1984, MNRAS, {\bf 284}, L9
+
+\bibitem[{Kaiser}<1987>]{kaiser87}
+Kaiser N., 1987, MNRAS, {\bf 227}, 1
+
+%\bibitem[{Kazin} et al.~<2013>]{kazin13} 
+%Kazin E. A., et al., 2013, MNRAS, {\bf 435}, 64
+
+%\bibitem[{Kirk et al.}<2013>]{kirk2013}
+%Kirk D., Lahav O., Bridle S., Jouvel S., Abdalla F., Frieman J., 2013, [eprint arXiv:1307.8062]
+
+%\bibitem[{Kitching} et al.~<2011>]{kitching2011}
+%Kitching, T. D., Heavens, A. F. , Miller, L., MNRAS, {\bf 413}, 2923 (2011)
+
+%\bibitem[{Komatsu et al.} <2011>]{wmap5ext}
+%Komatsu, E. et al.\ 2011, ApJS, 192, 18
+
+\bibitem[{Landy \& Szalay} <1993>]{landyszalay} 
+Landy S. D., Szalay A. S,, 1993, ApJ {\bf 412}, 64
+
+\bibitem[{Le F\`evre et al.} <2004>]{vvds} 
+Le F\`evre O. et al., 2004, A\&A, {bf 417}, 839
+
+\bibitem[{Leistedt et al.} <2015>]{leistedt2015}
+Leistedt B., el al. 2015, arXiv e-print:1507.05647
+
+\bibitem[{Lewis et al.} <2000>]{cambt} 
+Lewis A., Challinor A., Lasenby A., 2000, ApJ {\bf 538}, 473
+
+%\bibitem[{Lewis \& Challinor.} <2007>]{lewis2007} 
+%Lewis A., Challinor  A.  2007 Phys. Rev. D {\bf76}, 083005
+
+%\bibitem[{Limber}<1954>]{1954ApJ...119..655L}
+%Limber  D. N., 1954, ApJ {\bf 119}, 655
+
+%\bibitem[{Linder}<2005>]{linder1}
+%Linder, E. V. 2005, Phys. Rev. D {\bf 72}, 043529
+
+%\bibitem[{LoVerde \& Afshordi}~<2008>]{LoVerde2008}
+%LoVerde M., Afshordi N., Phys. Rev. D, {\bf 78}, 123506 (2008)
+
+\bibitem[{Mandelbaum et al.}~<(2008)>]{mandelbaum2008}
+Mandelbaum R., et al., 2008, MNRAS, {\bf 386}, 781 
+
+\bibitem[{Mart\' i et al.}~<(2014)>]{marti14}
+Mart\'i P., Miquel R., Bauer A., Gazta{\~n}aga E., 2014, MNRAS, {\bf 437}, 3490
+
+%\bibitem[{McDonald \& Seljak}~<2009>]{McDonaldSeljak}
+%McDonald P., Seljak U., 2009, JCAP {\bf 0901}, 007
+
+%\bibitem[{Montanari \& Durrer}~<2012>]{1206.3545}
+%Montanari F., Durrer R., 2012, Phys. Rev. D {\bf 86}, 063503
+
+\bibitem[{Myers, White \& Ball}~<2009>]{myers09}
+Myers A. D., White M., Ball N. M., 2009, MNRAS, {\bf 399}, 2279
+
+%\bibitem[{Newman}~<2008>]{newman08}
+%Newman J. A., 2008, ApJ {\bf 684}, 88
+
+%\bibitem[{Nock, Percival,\& Ross}<2010>]{2010MNRAS.407..520N} 
+%Nock K., Percival W. J., Ross A. J., 2010, MNRAS {\bf 407}, 520
+
+\bibitem[{Norberg et al.}<(2009)>]{norberg09} 
+Norberg P., Baugh C. M., Gazta\nn aga E., Croton D. J., 2009, MNRAS, {\bf 396}, 19
+
+\bibitem[{Newman et al.}<2013>]{deep2} 
+Newman J. A., Cooper M. C., Davis M. , Faber S. M., 
+Coil A. L., Guhathakurta  P. , Koo D. C. , Phillips A. C.,  Conroy C.,
+ Dutton A. A., et al., 2013, ApJS, {\bf 208}, 5
+
+%\bibitem[{Okumura} et al.~<2008>]{okumura08}
+%Okumura T., Matsubara T., Eisenstein D. J., Kayo I., Hikage C., 
+%Szalay A. S., Schneider D.P., 2008, ApJ {\bf 676}, 889 
+
+%\bibitem[{Padmanabhan et al.} <2007>]{nikhil}
+%Padmanabhan N., et al., 2007, MNRAS {\bf 378}, 852
+
+%\bibitem[{Percival et al.}~<2004>]{2df}
+%Percival W., et al., 2004, MNRAS {\bf 353}, 1201
+
+%\bibitem[{Peebles} <1980>]{peebles1980}
+%Peebles, P.~J.~E.,  The large-scale structure of the universe,
+ %   Princeton, N.J., Princeton University Press, 1980.~435 p.
+
+\bibitem[{Reddick et al.}<2013>]{reddick2013}
+Reddick R. M. ,Wechsler R. H., Tinker J. L., Behroozi P. S., 2013, 
+ApJ, {\bf 771}, 30 
+
+%\bibitem[{Reid} et al.~<2012>]{reid12}
+%Reid B., et al., 2012, MNRAS {\bf 426}, 2719
+
+%\bibitem[{Ross et al.}<2011>]{2011MNRAS.415.2193R}
+%Ross A.~J., Percival W.~J., Crocce M., Cabr{\'e} A., Gazta{\~n}aga E.,
+%2011, MNRAS  {\bf 415}, 2193
+
+%\bibitem[{Samushia} et al.~<2014>]{samushia14}
+%Samushia L., et al., 2014, MNRAS {\bf 439}, 3504
+
+\bibitem[{S\'anchez et al.}~<2014>]{sanchez14}
+S\'anchez C. et al., 2014, MNRAS {\bf 445}, 1482
+
+\bibitem[{Scranton et al.}~<(2002)>]{scranton02}
+Scranton R., et al., 2002, ApJ {\bf 579}, 48
+
+%\bibitem[{Seo et al.}<2003>]{seo2003}  Seo H. Eisenstein  D. J.  2003, Astrophys. J. 598, 720
+
+\bibitem[{Sheth}~<2007>]{sheth07}
+Sheth R. K., 2007, ApJ {\bf 378}, 709
+
+\bibitem[{Springel}~<2005>]{gadget}
+Springel V., 2005, MNRAS {\bf 364}, 1105
+
+%\bibitem[{Sobreira et al.}<2011>]{sobreira2011} Sobreira F. 2011 Physical Review D, vol. 84, Issue 10, id. 103001
+
+\bibitem[{Smith et al.}~<2003>]{halofit}
+Smith R. E. et al., 2003, ApJ {\bf 341}, 1311
+
+\bibitem[{Takahashi et al}.~<2012>]{takahashi2012}
+Takahashi. R., Sato M., Nishimichi T., Taruya A. Oguri M., 2012, ApJ, {\bf 761}, 152
+
+%\bibitem[{Taylor} et al.~<2013>]{Taylor2013}
+%Taylor K., et al., 2013, arXiv:1301.4175 
+
+%\bibitem[{Tegmark} et al.~<2006>]{tegmark06}
+%Tegmark M. et al., 2006, Phys. Rev D {\bf 74}, 123507
+
+%\bibitem[{Abbott} et al.~<2005>]{deswhitepaper}
+%The Dark Energy Survey Collaboration, White Paper submitted to the Dark Energy Task Force, [eprint arXiv::astro-ph/0510346]
+
+%\bibitem[{Thomas, Abdalla \& Lahav}<2011>]{thomas2011}
+%Thomas, S. A., Abdalla, F. B., Lahav, O. 2011,  MNRAS {\bf 412}, 1669
+%arXiv:1011.2448
+
+\bibitem[{van Breukelen \& Clewley}<2009>]{vanbreukelen09}
+van Breukelen C., Clewley L., O. 2009,  MNRAS {\bf 395}, 1845
+
+\bibitem[{Wang, Brunner \& Dolence}~<(2013)>]{wang13}
+Wang Y. Brunner R. J., Dolence J.C., 2013, MNRAS, {\bf 432}, 1961
+
+\bibitem[{Wittman}<2009>]{wittman2009}
+Wittman D., 2009, ApJL, {\bf 700}, L174
+
+
+%\bibitem[{White, Song \& Percival}~<2009>]{white2009}
+%White M., Song Y-S., Percival W. J., 2009, MNRAS, {\bf 397}, 1348
+
+\end{thebibliography}
+
+\appendix
+    
+\section{Error distribution}\label{sec:ap1}
+In order to check the robustness PDFs that we used in the paper, we estimated the distribution of the 
+photometric standardized error of the photo-z BCC galaxies used in the paper, ($z_{phot}-z_{true}/\sigma$). 
+The standard deviation $\sigma$ is given by Equation (\ref{eq:sigmaphz}).
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig_ap_1.pdf}
+\caption{\emph{Photometric standardized error for the mean}: We show the the standardized error using the mean of 
+each individual galaxy. The solid red line corresponds to the best fit gaussian with mean $\mu$ and error $\sigma_G$} 
+\label{fig:figap1}
+\end{center}
+\end{figure}
+In Figure \ref{fig:figap1} we show the results for the mean redshifts. We observe that the simple error estimate is close to 
+the the unbiased estimate ($\mu=0$, $\sigma_G=1$). If we consider the mode redshift, we see in Figure \ref{fig:figap2} that 
+the distribution of modes tends to be more concentrated than the distribution of means.
+\begin{figure}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig_ap_2.pdf}
+\caption{\emph{Photometric standardized error for the mode}:  Photometric standardized error for the mode and 
+the comparison with the best fit gaussian. As modes are defined by the peak of each PDF, the distribution tends 
+to be more concentrated than the distribution of mean PDF values.} 
+\label{fig:figap2}
+\end{center}
+\end{figure}
+
+We also tested how photometric redshifts are distributed according to the confidence intervals 
+by estimating the number of galaxies with photometric redshifts inside $1-\sigma$ and $2-\sigma$ levels, shown in Table \ref{table:tableap1}.
+\begin{table}
+{\center
+\begin{tabular}{|c|c|c|}
+\hline
+ &$1-\sigma$ & $2-\sigma$ \\ 
+\hline
+$\bar{z}$&$70\%$&$93\%$  \\
+\hline  
+$\hat{z}$&$69\%$&$90\%$  \\
+\hline  
+\end{tabular}
+\caption{Proportion of photometric redshifts inside $1-\sigma$ and $2-\sigma$ level confidence intervals for the mean, $\bar{z}$ and the mode, $\hat{z}$, photometric 
+redshifts. In the ideal case, they are $68\%$ and $95\%$.}
+\label{table:tableap1}
+}
+\end{table}
+We see that the distribution of mean values in confidence intervals is close to the expected $68\%$ and $95\%$ distributions. When considering the mode, 
+the values are more concentrated as we are considering the peaks of each individual PDF.
+
+%We also show the quality of the PDFs in Figure \ref{fig:Figap3}.
+%\begin{figure}
+%\begin{center}
+%%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{Figures_paper/Fig_ap_3.pdf}
+%\caption{Dependance of the mean \emph{zConf} on mean redshift. The filled region correspond to the $1-\sigma$ confidence level.} 
+%\label{fig:figap3}
+%\end{center}
+%\end{figure}
+%The mean value of the concentration parameter is close to 1 for a wide redshift range, implying that the majority of the PDFs are concentrated
+
+
+
+\section{Galaxy bias results}\label{sec:ap2}
+In table \ref{table:table1}, we show the galaxy bias fits for the different bin configurations and the the three photometric redshift methods (mean, mode, PDF) considered in the paper to 
+select galaxy in tomographic redshift bins, when considering PDF stacking redshift distributions. We also show the goodness of fit for each fit and the relative differences with the true measurements.
+\begin{table*}
+{\center
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+%\hline
+\cline{2-10}
+\multicolumn{1}{c}{}&\multicolumn{3}{|c|}{$\bar{z}$} &\multicolumn{3}{|c|}{$\hat{z}$}& \multicolumn{3}{|c|}{$p(z)$} \\ 
+\cline{2-10}
+\multicolumn{1}{c}{}&\multicolumn{2}{|c|}{PDF-stacking}&\multicolumn{1}{|c|}{Relative difference} &\multicolumn{2}{|c|}{PDF-stacking}&\multicolumn{1}{|c|}{Relative difference} &\multicolumn{2}{|c|}{PDF-stacking}&\multicolumn{1}{|c|}{Relative difference} \\ 
+\hline
+%Photo-z bin&$\bar{z}$& & & &$\hat{z}$& & & &$p(z)$ & & & \\ 
+%\hline
+Photo-z bin &Galaxy bias & $\chi^2$&Comparison True (n(z)) &Galaxy bias &$\chi^2$/dof &Comparison True (n(z))&Galaxy bias &$\chi^2$/dof &Comparison True (n(z)) \\ 
+\hline
+$0.2<z<0.5$&$1.52\pm0.064$ &12.3/7  &$-0.05\pm0.057$ &$1.50\pm 0.061$ &12.1/7 &$-0.01\pm0.057$ &$1.52\pm0.063$ &11.2/7 & $0\pm0.06$\\
+\hline  
+$0.5<z<0.8$& $1.61\pm0.036 $  & 0.99/7 &$-0.018\pm 0.032$ &$1.61\pm 0.037$ &0.92/7 &$-0.03\pm0.031$ &$1.61\pm 0.036$ &0.58/7 &$-0.02\pm0.03$ \\
+\hline  
+$0.8<z<1.1$&$1.96\pm0.026 $   & 7.6/7 & $0.016\pm0.020$ &$1.97\pm0.027 $ &8.3/7 & $0.015\pm0.019$&$1.95\pm0.026$ &7.4/7&$0.016\pm0.019$  \\
+\hline  
+$1.1<z<1.4$&$2.37\pm0.024 $ & 5.71/7 & $-0.033\pm 0.015$ &$2.39\pm0.024$ &8.9/7 &$0\pm0.014$ &$2.37\pm0.022 $ &7/7 &$-0.017\pm0.013$\\
+\hline
+\hline
+Photo-z bin &Galaxy bias & $\chi^2$&Comparison True (n(z)) &Galaxy bias &$\chi^2$/dof &Comparison True (n(z))&Galaxy bias &$\chi^2$/dof &Comparison True (n(z)) \\ 
+\hline
+$0.2<z<0.4$&$1.40\pm 0.058$  & 14.6/7 &$-0.06\pm0.055$ &$1.42\pm 0.059$ & 14.2/7& $-0.05\pm0.056$&$1.45\pm 0.059$ &12.9/7 &$-0.03\pm0.056$\\
+\hline  
+$0.4<z<0.6$& $1.59\pm 0.041$  & 4.1/7 &$-0.03\pm 0.035$ &$1.59\pm 0.041$ &4.4/7 &$-0.02\pm0.027$ &$1.59\pm 0.042$ &4.5/7 &$-0.01\pm0.037$ \\
+\hline  
+$0.6<z<0.8$& $1.72\pm 0.031$ & 2.6/8 &$0.04\pm0.026$ &$1.71\pm 0.031$ &2.8/8 &$0.04\pm0.027$ &$1.67\pm 0.03$ &2.9/8 & $0.02\pm0.026$\\
+\hline  
+$0.8<z<1.0$&$1.91\pm 0.027$  & 4/7 & $0.03\pm0.021$&$1.91\pm 0.027$ &3.7/7 & $0.04\pm0.02$&$1.87\pm 0.026$ & 4.3/7& $0.02\pm0.02$\\
+\hline
+$1.0<z<1.2$& $2.19\pm 0.022$ & 12/8 &$-0.02\pm0.013 $&$2.18\pm 0.022$ &11.1/8 &$-0.02\pm0.014$ &$2.19\pm 0.021$ &12.9/8 &$-0.02\pm0.013$ \\
+\hline  
+$1.2<z<1.4$& $2.34\pm 0.021$ & 3.9/8 &$-0.06\pm0.011$ &$2.36\pm 0.021$ &5.5/8 & $-0.02\pm0.012$&$2.39\pm 0.019$ &6.9/8 &$-0.02\pm0.011$\\
+\hline
+\hline
+Photo-z bin &Galaxy bias & $\chi^2$&Comparison True (n(z)) &Galaxy bias &$\chi^2$/dof &Comparison True (n(z))&Galaxy bias &$\chi^2$/dof &Comparison True (n(z)) \\ 
+\hline
+$0.2<z<0.35$&$1.37\pm0.058$ & 12.5/7 & $-0.07\pm0.056$ &$1.42\pm0.062 $ &12.7/7 & $-0.05\pm0.059$&$1.43\pm0.058 $ &12.6/7 & $-0.04\pm0.055$ \\
+\hline  
+$0.35<z<0.5$&$1.58\pm0.042$ & 8/8 & $0.026\pm0.038$&$1.65\pm0.042$ &7.8/8 & $0.09\pm 0.039$&$1.60\pm 0.043$ & 6.5/8&$-0.05\pm0.04$ \\
+\hline  
+$0.5<z<0.65$& $1.66\pm0.042$ &3.6/7 & $0.01\pm0.035$& $1.66\pm0.042$&  1.9/7& $-0.01\pm 0.035$ &$1.62\pm0.04 $ & 1.2/7& $-0.03\pm 0.033$ \\
+\hline  
+$0.65<z<0.8$&$1.76\pm0.034$&2.9/7  &$0.06\pm0.029$  &$1.75\pm 0.033$ & 2.7/7& $0.05\pm0.28$ &$1.69\pm 0.031$ &2.7/7 & $-0.03\pm 0.027$ \\
+\hline
+$0.8<z<0.95$& $1.86\pm0.027$ & 2.3/7 &$0.04\pm0.021$ & $1.87\pm 0.027$& 2.2/7&$0.04\pm0.021$ &$1.82\pm 0.026$ &/7 & $0.028\pm 0.021$ \\
+\hline  
+$0.95<z<1.1$&$2.19\pm0.024$ &16/8  &$0.043\pm0.016$ &$2.18\pm 0.023$ & 16.7/8&$0.04\pm0.016$ &$2.12\pm 0.021$ & 17.2/8& $0.014\pm 0.014$ \\
+\hline
+$1.1<z<1.25$& $2.33\pm0.021$ & 8/7 &$-0.025\pm0.013$ &$2.33\pm 0.021$ & 11.4/7& $0.01\pm0.013$&$2.33\pm 0.02$ & 8.5/7&$-0.02\pm 0.011$ \\
+\hline  
+$1.25<z<1.4$&$2.38\pm0.020$& 3.9/8 & $-0.07\pm0.011$&$2.37\pm 0.021$ & 4.2/8 & $-0.04\pm0.011$&$2.39\pm 0.019$ & 6.8/8 &$-0.03\pm 0.011$ \\
+\hline
+\hline
+Photo-z bin &Galaxy bias & $\chi^2$&Comparison True (n(z)) &Galaxy bias &$\chi^2$/dof &Comparison True (n(z))&Galaxy bias &$\chi^2$/dof &Comparison True (n(z)) \\ 
+\hline
+$0.2<z<0.3$&$1.36\pm 0.059$ &8.7/7  & $-0.05\pm 0.059$ &$1.47\pm0.068 $ &8.1/7 & $0.028\pm 0.068$&$1.4\pm 0.057$ & 8.2/7&$-0.03\pm 0.056$\\
+\hline  
+$0.3<z<0.4$&$1.45\pm0.046 $ & 6.2/8 & $-0.01\pm 0.044$ &$1.52\pm 0.048$ &5.7/8 &$0.04\pm 0.046$ &$1.51\pm 0.049$ &/8 &$0.01\pm 0.046$\\
+\hline  
+$0.4<z<0.5$& $1.60\pm 0.045$& 7.9/7 & $0.01\pm 0.04$ &$1.68\pm0.046 $ & 7.3/7&$0.08\pm 0.042$ &$1.62\pm0.045 $ &6.2/7 & $0.05\pm 0.041$\\
+\hline  
+$0.5<z<0.6$&$1.73 \pm 0.045$ & 3.8/7 & $0.01\pm 0.037$ & $1.71\pm 0.041$& 1.7/7 &$0 \pm 0.033$ & $1.63\pm0.039 $&1.4/7 & $-0.03\pm 0.033$\\
+\hline
+$0.6<z<0.7$& $ 1.82\pm 0.033$ & 2.5/8 & $0.1\pm 0.028$ &$1.79\pm 0.033$ & 2.7/8 & $0.09\pm 0.028$ &$1.70\pm0.032 $ & 1.6/8 & $0.04\pm 0.028$ \\
+\hline  
+$0.7<z<0.8$&$1.79 \pm 0.028 $ & 12.3/8 & $0.08\pm 0.025$ &$1.77\pm0.028 $ & 13.1/8& $0.07\pm 0.024$ &$1.70\pm0.025 $ & 8.7/8&$0.04\pm 0.022$ \\
+\hline
+$0.8<z<0.9$& $ 1.84\pm0.028 $ & 0.85/7 &$0.06\pm 0.023$ &$1.85\pm 0.028$ & 0.8/7& $0.076\pm 0.023$ &$1.77\pm0.025 $ &2/7 & $0.04\pm 0.021$\\
+\hline  
+$0.9<z<1.0$&$ 2.12\pm0.027 $ & 7.3/7 & $0.07\pm 0.019$ &$2.06\pm 0.027$ & 6.7/7&$0.06\pm 0.020$ &$1.99\pm0.023 $ & 9.9/7& $0.03\pm 0.017$\\
+\hline
+$1.0<z<1.1$& $ 2.27\pm 0.023$ & 12.2/8 & $0.06\pm0.015$&$2.22\pm 0.023$ & 14.2/8 &$0.04\pm 0.015$ &$2.16\pm0.02 $ &16.2/7 & $0.014\pm 0.013$ \\
+\hline  
+$1.1<z<1.2$&$ 2.31\pm 0.02$ & 12.6/7 & $-0.02\pm 0.012$ &$2.32\pm 0.02$ &16.7/7 & $-0.01\pm 0.012$&$2.29\pm 0.018$ & 9.4/7& $-0.02\pm 0.011$ \\
+\hline
+$1.2<z<1.3$&$ 2.31\pm 0.02$  & 3.5/8 & $-0.05\pm 0.011$ &$2.32\pm 0.02$ &4.6/8 & $0.03\pm 0.011$&$2.38\pm0.018 $ & 7.2/8& $-0.02\pm 0.010$\\
+\hline  
+$1.3<z<1.4$&$ 2.43\pm0.021 $ & 4.1/8 & $-0.06\pm 0.011$ &$2.42\pm 0.021$ &5.1/8 &$-0.05\pm 0.012$ & $2.40\pm 0.018$&6.8/8 &$-0.04\pm 0.01$\\
+\hline
+\end{tabular}}
+\caption{Galaxy bias measurements for photometric samples selected according to  the mean, $\bar{z}$, mode, $\hat{z}$, or PDF weighted galaxies in 
+redshift bins, given different bin configurations.}
+\label{table:table1}
+}
+\end{table*}
+
+
+\section{True redshift distributions}\label{sec:ap3}
+As shown in section \ref{sec:res3}, the galaxy bias measurements obtained from n(z) given by PDF stacking differ with the true measurements. This is caused by 
+the difference between the true redshift distribution of the photo-z galaxy sample and the PDF stacking $n(z)$. As an example, we show in Figure \ref{fig:figap3} the differences between the true redshift $n(z)$ and the PDF stacking $n(z)$ 
+for galaxies selected according to the mean redshift on a given set of top hat redshift bins at low redshift. We note that the tails of the PDF stacking n(z) are longer than
+\begin{figure*}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.50\textwidth]{Figures_paper/Fig_4nz_0p2_0p5_zmean_2.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_6nz_0p2_0p4_zmean_2.pdf}\\
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_8nz_0p2_0p35_zmean_2.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_12nz_0p3_0p4_zmean_2.pdf}
+\caption{\emph{Low redshift}:  Redshift distributions for the true redshift distribution of galaxies selected according to mean photo-z redshift and the PDF stacking 
+redshift distribution for the the same galaxy sample. We considered low redshift samples.} 
+%\caption{Redshift distributions of the photo-z sample, true redshift distribution of galaxies selected according to mean photo-z redshift and the PDF stacking 
+%redshift distribution for the same galaxies.} 
+\
+\label{fig:figap3}
+\end{center}
+\end{figure*}
+the true redshift distribution. This disagreement is expected and has been observed when using template based and machine learning algorithms that incorporate PDFs. We expanded the comparison to intermediate redshift (Figure \ref{fig:figap4}) and high redshift (Figure \ref{fig:figap5}), observing similar differences.
+\begin{figure*}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_3nz_0p5_0p8_1.pdf}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_3nz_0p6_0p8_1.pdf}\\
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_3nz_0p65_0p8_1.pdf}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_3nz_0p6_0p7_1.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.50\textwidth]{Figures_paper/Fig_4nz_0p5_0p8_zmean_2.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_6nz_0p6_0p8_zmean_2.pdf}\\
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_8nz_0p65_0p8_zmean_2.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_12nz_0p6_0p7_zmean_2.pdf}
+\caption{\emph{Intermediate redshift}: Comparison between the true redshift distribution of galaxies selected according to mean photo-z redshift and the PDF stacking 
+redshift distribution for the same galaxies.} 
+%\caption{Redshift distributions of the photo-z sample, true redshift distribution of galaxies selected according to mean photo-z redshift and the PDF stacking 
+%redshift distribution for the same galaxies.} 
+\
+\label{fig:figap4}
+\end{center}
+\end{figure*}
+
+\begin{figure*}
+\begin{center}
+%\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.48\textwidth]{../Plots/Fig_bias_nz6__full_displacement.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_4nz_1p1_1p4_zmean_2.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_6nz_1p2_1p4_zmean_2.pdf}\\
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_8nz_1p25_1p4_zmean_2.pdf}
+\includegraphics[trim = 0cm 0cm 0cm 0cm, width=0.49\textwidth]{Figures_paper/Fig_12nz_1p3_1p4_zmean_2.pdf}
+\caption{\emph{High redshift}: True redshift distribution of galaxies selected according to mean photo-z redshift compared with the distribution given by the PDF stacking of 
+the same sample.} 
+%\caption{Redshift distributions of the photo-z sample, true redshift distribution of galaxies selected according to mean photo-z redshift and the PDF stacking 
+%redshift distribution for the same galaxies.} 
+\
+\label{fig:figap5}
+\end{center}
+\end{figure*}
+
+
+
+
+
+\bsp
+
+\label{lastpage}
+
+\end{document}
+
